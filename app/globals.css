@@ -1,5 +1,46 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
+@theme {
+  /* ── Fonts ────────────────────────────────────────── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* ── Primary (Purple) ─────────────────────────────── */
+  --color-primary-light:     #F0ECFD;
+  --color-primary-medium:    #7C52D9;
+  --color-primary-dark:      #3B1F8C;
+
+  /* ── Secondary (Blue) ─────────────────────────────── */
+  --color-secondary-light:   #EBF2FD;
+  --color-secondary-medium:  #4E86E4;
+  --color-secondary-dark:    #1A3F8F;
+
+  /* ── Tertiary (Pink) ──────────────────────────────── */
+  --color-tertiary-light:    #FDEDF4;
+  --color-tertiary-medium:   #E4669A;
+  --color-tertiary-dark:     #9B1D57;
+}
+
+/* ── Base Styles ────────────────────────────────────── */
+html {
+  font-family: var(--font-body);
+  color: #000000;
+  background-color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+h4, h5, h6, label, button {
+  font-family: var(--font-body);
+}
+
+code, .score, .timer {
+  font-family: var(--font-mono);
 }
