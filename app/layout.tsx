@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Playfair_Display, DM_Sans, JetBrains_Mono } from "next/font/google";
-import Navigation from '../components/Navigation';
+import ConditionalShell from "@/components/blocks/ConditionalShell";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-display",
@@ -38,8 +38,9 @@ export default function RootLayout({
       className={`${playfairDisplay.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navigation />
+        <ConditionalShell>
         {children}
+        </ConditionalShell>
       </body>
     </html>
   );
