@@ -65,8 +65,8 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-[72px] h-screen bg-white border-r border-[#ede8fb]
-                      flex flex-col items-center py-5 flex-shrink-0">
+    <aside className="px-8 md:px-0 w-full md:w-[72px] md:h-screen bg-white border-r border-[#ede8fb]
+                      flex flex-row md:flex-col items-center py-5 flex-shrink-0">
 
       {/* Logo mark */}
       <Link href="/dashboard" className="mb-6">
@@ -77,7 +77,7 @@ export default function Sidebar() {
       </Link>
 
       {/* Nav links */}
-      <nav className="flex flex-col items-center gap-1 flex-1 w-full px-2">
+      <nav className="flex flex-row md:flex-col items-center gap-1 flex-1 w-full px-2">
         {navItems.map((item) => {
           // Exact match for /dashboard root, prefix match for sub-routes
           const isActive =

@@ -13,7 +13,7 @@ export default function DashboardLayout({
   return (
     // h-screen + overflow-hidden = the page never scrolls as a whole
     // only the <main> content area scrolls independently
-    <div className="flex h-screen bg-[#f7f5ff] font-body overflow-hidden">
+    <div className="flex flex-col-reverse md:flex-row h-screen bg-[#f7f5ff] font-body overflow-hidden">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <Topbar />

@@ -113,7 +113,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
         <div className="bg-white rounded-2xl border border-[#ede8fb] p-6
                         hover:border-primary-medium hover:shadow-xl hover:shadow-primary-medium/10
