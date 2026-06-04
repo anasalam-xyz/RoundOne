@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/blocks/Navbar";
 import Footer from "@/components/blocks/Footer";
 
-const APP_ROUTES = ["/dashboard", "/interview"];
+const APP_ROUTES = ["/dashboard", "/interview", "/auth"];
 
 export default function ConditionalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
