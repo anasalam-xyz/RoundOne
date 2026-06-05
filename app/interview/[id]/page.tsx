@@ -34,10 +34,8 @@ export default function InterviewPage() {
   const router  = useRouter();
 
   // ── Session config — in real app, fetch from DB using `id` ────
-  // TODO: replace with: const session = await fetchSession(id)
-  const totalQuestions = 10;
-  const role           = "Frontend Dev";
-  const interviewType  = "Technical";
+ // Replace the hardcoded values with these
+  
 
   // ── Core state ────────────────────────────────────────
   const [currentQ,     setCurrentQ]     = useState(1);
@@ -57,7 +55,23 @@ export default function InterviewPage() {
 
   // ── Textarea ref for auto-focus ────────────────────────
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+// Fetch session config from DB on mount
+  const [sessionConfig, setSessionConfig] = useState<{
+    role: string; level: string; type: string; questionCount: number;
+  } | null>(null);
+  const totalQuestions = sessionConfig?.questionCount ?? 10;
+  const role           = sessionConfig?.role          ?? "";
+  const interviewType  = sessionConfig?.type          ?? "";
+  const level          = sessionConfig?.level         ?? "";
+  
+  useEffect(() => {
+    async function fetchSession() {
+      const res = await fetch(`/api/sessions/${id}`);
+      const data = await res.json();
+      setSessionConfig(data);
+    }
+    fetchSession();
+  }, [id]);
   // ── Fetch the first question on mount ─────────────────
   useEffect(() => {
     fetchNextQuestion([]);
@@ -81,28 +95,20 @@ export default function InterviewPage() {
     setShowPrevAnswer(false);
 
     try {
-      // TODO: replace with real API call
-      // const res = await fetch("/api/interview/question", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     sessionId: id,
-      //     role,
-      //     type: interviewType,
-      //     questionNumber: prevHistory.length + 1,
-      //     totalQuestions,
-      //     history: prevHistory,
-      //   }),
-      // });
-      // const { question } = await res.json();
-
-      // Mock question for UI development
-      await new Promise((r) => setTimeout(r, 1800));
-      const mockQuestion = prevHistory.length === 0
-        ? `Tell me about yourself and why you're interested in a ${role} role.`
-        : `Based on your previous answer, can you elaborate on how you've handled performance optimization in a real project?`;
-
-      setQuestion(mockQuestion);
+     const res = await fetch("/api/interview/question", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: id,
+        role,
+        interviewType,
+        questionNumber: prevHistory.length + 1,
+        totalQuestions,
+        history: prevHistory,
+      }),
+    });
+      const { question } = await res.json();
+      setQuestion(question);
       setAiLoading(false);
 
       // Start timing from when question appears
@@ -170,18 +176,20 @@ export default function InterviewPage() {
   // ── Final evaluation API call ─────────────────────────
   async function runFinalEvaluation(finalHistory: QAPair[]) {
     try {
-      // TODO: replace with real API call
-      // const res = await fetch("/api/interview/evaluate", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ sessionId: id, history: finalHistory }),
-      // });
-
-      // Mock delay — replace with actual Gemini evaluation time
-      await new Promise((r) => setTimeout(r, 5000));
+      await fetch("/api/interview/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: id,
+          role,
+          level,
+          type: interviewType,
+          history: finalHistory,
+        }),
+      });
       router.push(`/results/${id}`);
 
-    } catch (err) {
+    } catch(err) {
       console.error("Evaluation failed:", err);
     }
   }
@@ -195,7 +203,16 @@ export default function InterviewPage() {
   }
 
   const progress = ((currentQ - 1) / totalQuestions) * 100;
-
+  if (!sessionConfig) {
+    return (
+      <div className="min-h-screen bg-[#f7f5ff] flex items-center justify-center">
+        <div className="flex items-center gap-2 text-sm text-[#9090b0]">
+          <div className="w-4 h-4 rounded-full border-2 border-primary-medium border-t-transparent animate-spin" />
+          Loading session...
+        </div>
+      </div>
+    );
+  }
   // ── Analyzing screen ───────────────────────────────────
   if (analyzing) {
     return (

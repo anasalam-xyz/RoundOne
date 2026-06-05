@@ -63,17 +63,26 @@ export default function SetupPage() {
     if (!canStart) return;
     setLoading(true);
 
-    // TODO: POST to /api/sessions/create once DB is set up
-    // const res = await fetch("/api/sessions/create", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ role, level, type, count, mode }),
-    // });
-    // const { sessionId } = await res.json();
-    // router.push(`/interview/${sessionId}`);
+    const res = await fetch("/api/sessions/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        role,
+        level,
+        type,
+        questionCount: count,
+      }),
+    });
 
-    // Placeholder redirect until API is ready
-    router.push("/interview/demo");
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error(data.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push(`/interview/${data.sessionId}`);
   }
 
   // ── Shared card class builder ─────────────────────────

@@ -5,7 +5,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
@@ -26,43 +26,54 @@ export default function AuthForm() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    
+    const supabase = createClient();
+    if(mode === "signup") {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name }, // stored in raw_user_meta_data, trigger copies to profiles
+        },
+      });
 
-    if(mode === "login") {
-      const result = await signIn("credentials", {
-        redirect: false,
+      console.log("data:", data);
+      console.log("error:", error)
+
+      if(error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+
+      // Auto sign-in after signup
+      await supabase.auth.signInWithPassword({ email, password });
+      router.push("/dashboard");
+
+    } 
+    else {
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (result?.error) {
+      if(error) {
         setError("Invalid email or password. Please try again.");
         setLoading(false);
         return;
       }
 
       router.push("/dashboard");
-
-    } else {
-      // Hits the register API route you'll build at app/api/auth/register/route.ts
-      const res  = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Something went wrong. Please try again.");
-        setLoading(false);
-        return;
-      }
-
-      // Auto sign-in after successful registration
-      await signIn("credentials", { redirect: false, email, password });
-      router.push("/dashboard");
     }
   }
 
+  async function handleOAuth(provider: "google" | "github") {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: `${location.origin}/auth/callback` },
+    });
+  }
   // Shared input classes — defined once to keep JSX clean
   const inputClass = `
     w-full border border-[#ede8fb] rounded-xl px-4 py-3 text-sm
@@ -98,7 +109,7 @@ export default function AuthForm() {
         {/* Google */}
         <button
           type="button"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          onClick={() => handleOAuth("google")} 
           className="w-11 h-11 rounded-xl border border-[#ede8fb] bg-white
                      flex items-center justify-center
                      hover:border-primary-medium hover:-translate-y-px
@@ -116,7 +127,7 @@ export default function AuthForm() {
         {/* GitHub */}
         <button
           type="button"
-          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+          onClick={() => handleOAuth("github")} 
           className="w-11 h-11 rounded-xl border border-[#ede8fb] bg-white
                      flex items-center justify-center
                      hover:border-primary-medium hover:-translate-y-px
