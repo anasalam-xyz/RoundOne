@@ -59,7 +59,7 @@ export default function InterviewPage() {
   const [sessionConfig, setSessionConfig] = useState<{
     role: string; level: string; type: string; questionCount: number;
   } | null>(null);
-  const totalQuestions = sessionConfig?.questionCount ?? 10;
+  const totalQuestions = 2//sessionConfig?.questionCount ?? 10;
   const role           = sessionConfig?.role          ?? "";
   const interviewType  = sessionConfig?.type          ?? "";
   const level          = sessionConfig?.level         ?? "";
