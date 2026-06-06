@@ -119,10 +119,10 @@ export default async function ResultsPage({
 
           {/* Verdict + meta */}
           <div>
-            <h1 className="font-display text-xl sm:text-2xl font-semibold text-[#1a1a2e]
-                           leading-snug mb-3">
+            <h3 className="md:px-4 font-display  text-[#1a1a2e] leading-snug mb-3"
+              style={{fontSize:"1.2rem"}}>
               {session.verdict}
-            </h1>
+            </h3>
             <div className="flex flex-wrap gap-2">
               <span className="text-[10px] font-semibold bg-primary-light text-primary-dark
                                px-3 py-1 rounded-full">
