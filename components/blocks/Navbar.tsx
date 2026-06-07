@@ -10,15 +10,15 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: "About",        href: "#about" },
-    { label: "How it works", href: "#how-it-works" },
+    { label: "About",        href: "/about" },
+    { label: "How it works", href: "/about/#process" },
     { label: "Features",     href: "#features" },
   ];
 
   return (
     <nav className="bg-white border-b border-[#ede8fb] px-12 h-16 flex items-center justify-between font-body">
 
-      <Link href="/" className="text-xl font-bold flex gap-0.5">
+      <Link href="." className="text-xl font-bold flex gap-0.5">
         <span className="text-secondary-medium">Round</span>
         <span className="text-tertiary-medium">One</span>
       </Link>

@@ -4,14 +4,14 @@ import Link from "next/link";
 
 const links = {
   Product: [
-    { label: "How it works", href: "#how-it-works" },
-    { label: "Features",     href: "#features" },
+    { label: "How it works", href: "/about/#process" },
+    { label: "Features",     href: "/#features" },
     { label: "Dashboard",    href: "/dashboard" },
   ],
   Company: [
-    { label: "About",   href: "#about" },
-    { label: "Contact", href: "#contact" },
-    { label: "Privacy", href: "/privacy" },
+    { label: "Contact Us",   href: "mailto:anasalam.xyz@gmail.com" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Use", href: "/terms" },
   ],
 };
 

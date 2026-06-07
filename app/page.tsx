@@ -3,6 +3,7 @@
 // Logged-in users are redirected to /dashboard from middleware.ts
 import Image from "next/image";
 import { ArrowRight, ArrowRightToLine, MoveRight, Settings2, BotMessageSquare, ChartColumn, BookHeart, PenLine, Timer, FileClock, UsersRound, Share2} from "lucide-react";
+import HeroButtons from "@/components/blocks/HeroButtons";
 
 export default function LandingPage() {
   return (
@@ -23,18 +24,10 @@ export default function LandingPage() {
             Practice with a conversational AI interviewer. Get scored, get
             detailed feedback, and track your improvement over time.
           </p>
+        <HeroButtons />
 
-          <div className="flex flex-col md:flex-row md:items-center gap-4 w-fit">
-            <button className="inline-flex items-center group bg-primary-medium hover:bg-primary-dark text-white px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary-medium/25">
-              Start practicing free 
-              <MoveRight size="16" className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200"/>
-            </button>
-            <button className="ml-4 md:ml-0 group inline-flex items-center hover:underline text-primary-medium text-sm font-medium flex items-center gap-1.5 group transition-all duration-200">
-              See how it works
-              <ArrowRight size="16" className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200"/>
-            </button>
-          </div>
         </div>
+
 
         <div className="flex justify-center group">
           <div className="bg-white rounded-2xl border border-[#ede8fb] p-7 w-full md:w-72 animate-[float_3s_ease-in-out_infinite]">
@@ -113,7 +106,7 @@ export default function LandingPage() {
 
       <div className="h-px bg-[#ede8fb] mx-12" />
 
-      <section className="max-w-6xl mx-auto px-12 py-16">
+      <section id="features" className="max-w-6xl mx-auto px-12 py-16">
         <p className="text-xs font-semibold text-tertiary-medium tracking-widest uppercase mb-2">Features</p>
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-[#1a1a2e] mb-3">Everything you need to prepare</h2>
         <p className="text-[#5a5a7a] text-sm leading-relaxed mb-10 max-w-lg">

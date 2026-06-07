@@ -194,7 +194,7 @@ export default async function DashboardPage() {
               <div key={s.id} className="flex flex-col items-center gap-1 flex-1">
                 <div
                   className={`w-full rounded-t-md hover:opacity-75
-                      ${isLatest ? "bg-primary-medium" : "bg-primary-light"}`}
+                      ${isLatest ? "bg-tertiary-dark" : "bg-tertiary-medium"}`}
                   style={{ height: `${heightPx}px` }}
                   title={`${s.score}`}
                 />

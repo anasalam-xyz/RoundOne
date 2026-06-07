@@ -8,8 +8,9 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { Mail } from "lucide-react";
 
-type Mode = "login" | "signup";
+type Mode = "login" | "signup" | "verify";
 
 export default function AuthForm() {
   const router = useRouter();
@@ -28,17 +29,15 @@ export default function AuthForm() {
     setLoading(true);
     
     const supabase = createClient();
+    // replace the signup block in handleSubmit
     if(mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { name }, // stored in raw_user_meta_data, trigger copies to profiles
+          data: { name },
         },
       });
-
-      console.log("data:", data);
-      console.log("error:", error)
 
       if(error) {
         setError(error.message);
@@ -46,10 +45,14 @@ export default function AuthForm() {
         return;
       }
 
-      // Auto sign-in after signup
-      await supabase.auth.signInWithPassword({ email, password });
-      router.push("/dashboard");
+      // With email verification on, session will be null until user confirms
+      if (data.session === null) {
+        setLoading(false);
+        setMode("verify"); // new mode — show confirmation message
+        return;
+      }
 
+      router.push("/dashboard");
     } 
     else {
       const { error } = await supabase.auth.signInWithPassword({
@@ -81,6 +84,36 @@ export default function AuthForm() {
     focus:outline-none focus:border-primary-medium focus:bg-white
     transition-colors duration-200
   `;
+  if (mode === "verify") {
+    return (
+      <div className="w-full max-w-sm text-center space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-primary-light flex items-center
+                        justify-center mx-auto text-2xl">
+          <Mail size={12}/>
+        </div>
+        <h2 className="font-display text-2xl font-semibold text-[#1a1a2e]">
+          Check your email
+        </h2>
+        <p className="text-sm text-[#9090b0] leading-relaxed">
+          We sent a confirmation link to <span className="font-semibold text-[#1a1a2e]">{email}</span>.
+          Click it to activate your account.
+        </p>
+        <p className="text-xs text-[#9090b0]">
+          Didn't get it?{" "}
+          <button
+            type="button"
+            onClick={async () => {
+              const supabase = createClient();
+              await supabase.auth.resend({ type: "signup", email });
+            }}
+            className="text-primary-medium font-semibold hover:text-primary-dark"
+          >
+            Resend email
+          </button>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">

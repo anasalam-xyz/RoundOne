@@ -61,7 +61,7 @@ const navItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ initials }: { initials: string }) {
   const pathname = usePathname();
 
   return (
@@ -72,7 +72,7 @@ export default function Sidebar() {
       <Link href="/dashboard" className="mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
                         hover:bg-primary-dark transition-colors duration-200">
-          <span className="text-white font-bold text-xs">R1</span>
+          <span className="text-white font-bold text-xs">{initials}</span>
         </div>
       </Link>
 
@@ -107,7 +107,7 @@ export default function Sidebar() {
       <div className="w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium
                       flex items-center justify-center cursor-pointer
                       hover:border-primary-medium transition-colors duration-200">
-        <span className="text-[9px] font-bold text-tertiary-dark">AN</span>
+        <span className="text-[9px] font-bold text-tertiary-dark">{initials}</span>
       </div>
 
     </aside>
