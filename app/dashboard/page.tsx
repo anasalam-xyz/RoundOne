@@ -76,9 +76,10 @@ export default async function DashboardPage() {
       <div className="max-w-5xl mx-auto flex flex-col items-center justify-center
                       min-h-[60vh] text-center gap-4">
         <Image src="/undraw_refreshing-beverage_w8al.svg" 
-          height={160} 
-          width={160} 
-          alt="No Interveiws"
+          height={0} 
+          width={0} 
+          alt="No Interveiws" 
+          className="h-auto w-32"
         />
         <h2 className="font-display text-2xl font-semibold text-[#1a1a2e]">
           No interviews yet
@@ -191,7 +192,7 @@ export default async function DashboardPage() {
             const heightPx  = Math.round(((s.score ?? 0) / 100) * 112); // 112px = h-28
 
             return (
-              <div key={s.id} className="flex flex-col items-center gap-1 flex-1">
+              <div key={s.id} className="flex flex-col items-center gap-1 flex-1 max-w-8">
                 <div
                   className={`w-full rounded-t-md hover:opacity-75
                       ${isLatest ? "bg-tertiary-dark" : "bg-tertiary-medium"}`}

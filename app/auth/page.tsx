@@ -34,24 +34,20 @@ export default function AuthPage() {
       </div>
 
       {/* RIGHT — illustration panel, completely static, no mode logic needed */}
-      <div className="hidden md:flex flex-col items-center justify-center bg-[#f7f5ff] px-10 gap-7">
+      <div className="hidden md:flex flex-col items-center justify-center bg-[#f7f5ff] px-20 gap-7">
         <Image src="undraw_playful-cat_3ta5.svg" 
-          height={400} 
-          width={400} 
+          height={0} 
+          width={0} 
           alt="auth_page_illustration"
+          className="w-fit h-auto"
         />
 
         {/* Floating score card — gives the right panel context */}
         <div className="flex items-center gap-3 bg-white rounded-2xl border border-[#ede8fb]
                         px-4 py-3 shadow-lg shadow-primary-medium/8 w-fit">
-          <div className="w-9 h-9 rounded-xl bg-primary-light flex items-center justify-center flex-shrink-0">
-            <svg width="18" height="18" fill="none" stroke="#7C52D9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-              <path d="M18 20V10M12 20V4M6 20v-6" />
-            </svg>
-          </div>
           <div>
-            <p className="text-xs font-semibold text-[#1a1a2e]">Last score: 82/100</p>
-            <p className="text-[10px] text-[#9090b0]">Frontend Dev · Technical</p>
+            <p className="text-xs font-semibold text-[#1a1a2e]"></p>
+            <p className="text-[10px] text-[#9090b0]">Your Credentials are safe with us.</p>
           </div>
         </div>
  

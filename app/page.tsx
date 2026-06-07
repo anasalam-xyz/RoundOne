@@ -32,8 +32,9 @@ export default function LandingPage() {
         <div className="flex justify-center group">
           <div className="bg-white rounded-2xl border border-[#ede8fb] p-7 w-full md:w-72 animate-[float_3s_ease-in-out_infinite]">
             <Image src="/hero_bird.svg"
-              height={400} 
-              width={400} 
+              className="h-auto w-fit"
+              height={0} 
+              width={0} 
               alt="hero image for round-one"
             />
             <div className="space-y-2 mb-4">
