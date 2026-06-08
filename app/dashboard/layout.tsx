@@ -1,5 +1,4 @@
-// app/dashboard/layout.tsx
-// Shell for all /dashboard/* pages — sidebar + topbar + scrollable content area
+// Shell for all /dashboard/* pages sidebar + topbar + scrollable content area
 // Navbar and Footer from the landing page are NOT used here
 
 import Sidebar from "@/components/dashboard/Sidebar";

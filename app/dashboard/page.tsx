@@ -1,6 +1,5 @@
-// app/dashboard/page.tsx
-// Overview — real data from Supabase
-// Server component — fetches directly, no API route needed
+// Overviewreal data from Supabase
+// Server component fetches directly, no API route needed
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -70,7 +69,6 @@ export default async function DashboardPage() {
   const strengths     = lastSessionFull?.strengths  ?? [];
   const weaknesses    = lastSessionFull?.weaknesses ?? [];
 
-  // ── Empty state ────────────────────────────────────
   if (allSessions.length === 0) {
     return (
       <div className="max-w-5xl mx-auto flex flex-col items-center justify-center
@@ -102,7 +100,6 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-5">
 
-      {/* ── Hero row ──────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
         {last && (
@@ -177,7 +174,6 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* ── Bottom row ────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
         <div className="bg-white rounded-2xl border border-[#ede8fb] p-6
@@ -276,7 +272,6 @@ export default async function DashboardPage() {
             </>
           )}
         </div>
-
       </div>
     </div>
   );

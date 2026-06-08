@@ -1,7 +1,6 @@
-// app/interview/[id]/page.tsx
-// Live interview session — one question at a time, conversational AI flow
+// Live interview session ,,one question at a time, conversational AI flow
 // Tracks time-to-first-keystroke and answer duration silently for scoring
-// On last answer → analyzing screen → redirect to /results/[id]
+// On last answer -> analyzing screen -> redirect to /results/[id]
 
 "use client";
 
@@ -9,7 +8,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { SendHorizonal, StopCircle } from "lucide-react";
 
-// ── Types ──────────────────────────────────────────────
 interface QAPair {
   question: string;
   answer:   string;
@@ -17,14 +15,10 @@ interface QAPair {
   answerDuration: number; // ms from first keystroke to submit
 }
 
-// ── Analyzing screen messages — cycle through these ────
 const ANALYZING_MESSAGES = [
   "Reading through your answers...",
   "Evaluating communication clarity...",
   "Checking technical accuracy...",
-  "Identifying strengths...",
-  "Spotting areas to improve...",
-  "Calculating your score...",
   "Building your feedback report...",
   "Almost there...",
 ];
@@ -33,11 +27,6 @@ export default function InterviewPage() {
   const { id }  = useParams();
   const router  = useRouter();
 
-  // ── Session config — in real app, fetch from DB using `id` ────
- // Replace the hardcoded values with these
-  
-
-  // ── Core state ────────────────────────────────────────
   const [currentQ,     setCurrentQ]     = useState(1);
   const [question,     setQuestion]     = useState("");
   const [answer,       setAnswer]       = useState("");
@@ -48,12 +37,10 @@ export default function InterviewPage() {
   const [analyzeMsg,   setAnalyzeMsg]   = useState(ANALYZING_MESSAGES[0]);
   const [showPrevAnswer, setShowPrevAnswer] = useState(false);
 
-  // ── Silent time tracking refs ──────────────────────────
   const questionRenderedAt = useRef<number>(0); // when question appeared
   const firstKeyAt         = useRef<number>(0); // first keystroke timestamp
-  const hasTyped           = useRef(false);     // prevent double-recording
+  const hasTyped           = useRef(false);     // prevent double-recordina,ng
 
-  // ── Textarea ref for auto-focus ────────────────────────
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 // Fetch session config from DB on mount
   const [sessionConfig, setSessionConfig] = useState<{
@@ -72,12 +59,12 @@ export default function InterviewPage() {
     }
     fetchSession();
   }, [id]);
-  // ── Fetch the first question on mount ─────────────────
+  //Fetch the first question on mount
   useEffect(() => {
     fetchNextQuestion([]);
   }, []);
 
-  // ── Cycle analyzing messages every 2s ─────────────────
+  //Cycle analyzing messages every 2s
   useEffect(() => {
     if (!analyzing) return;
     let i = 1;
@@ -88,7 +75,7 @@ export default function InterviewPage() {
     return () => clearInterval(interval);
   }, [analyzing]);
 
-  // ── Fetch next question from Gemini API ───────────────
+  //Fetch next question from Gemini API
   async function fetchNextQuestion(prevHistory: QAPair[]) {
     setAiLoading(true);
     setQuestion("");
@@ -125,7 +112,7 @@ export default function InterviewPage() {
     }
   }
 
-  // ── Track first keystroke silently ────────────────────
+  //Track first keystroke silently
   function handleAnswerChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setAnswer(e.target.value);
 
@@ -135,7 +122,7 @@ export default function InterviewPage() {
     }
   }
 
-  // ── Submit answer + fetch next question ───────────────
+  //Submit answer + fetch next question
   async function handleSubmit() {
     if (!answer.trim() || submitting || aiLoading) return;
     setSubmitting(true);
@@ -161,7 +148,7 @@ export default function InterviewPage() {
     setSubmitting(false);
     setShowPrevAnswer(true);
 
-    // Last question — go to analyzing screen
+    // Last question - go to analyzing screen
     if (currentQ >= totalQuestions) {
       setAnalyzing(true);
       await runFinalEvaluation(updatedHistory);
@@ -173,7 +160,7 @@ export default function InterviewPage() {
     fetchNextQuestion(updatedHistory);
   }
 
-  // ── Final evaluation API call ─────────────────────────
+  // Final evaluation API call
   async function runFinalEvaluation(finalHistory: QAPair[]) {
     try {
       await fetch("/api/interview/evaluate", {
@@ -194,7 +181,7 @@ export default function InterviewPage() {
     }
   }
 
-  // ── Submit on Enter (not Shift+Enter) ─────────────────
+  //Submit on Enter (not Shift+Enter)
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -213,12 +200,11 @@ export default function InterviewPage() {
       </div>
     );
   }
-  // ── Analyzing screen ───────────────────────────────────
+  //Analyzing screen
   if (analyzing) {
     return (
       <div className="min-h-screen bg-[#f7f5ff] font-body flex flex-col">
 
-        {/* Topbar */}
         <div className="bg-white border-b border-[#ede8fb] h-14 px-6 flex items-center gap-3 flex-shrink-0">
           <span className="text-base font-bold">
             <span className="text-secondary-medium">Round</span>
@@ -229,10 +215,7 @@ export default function InterviewPage() {
           </span>
         </div>
 
-        {/* Centered analyzing content */}
         <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 text-center">
-
-          {/* Pulsing ring */}
           <div className="relative w-20 h-20 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border-2 border-primary-medium/20
                             animate-[ping_1.5s_ease-in-out_infinite]" />
@@ -253,7 +236,6 @@ export default function InterviewPage() {
             </p>
           </div>
 
-          {/* Cycling message pill */}
           <div
             key={analyzeMsg}
             className="text-xs font-semibold text-primary-medium bg-primary-light
@@ -262,7 +244,6 @@ export default function InterviewPage() {
             {analyzeMsg}
           </div>
 
-          {/* Three color dots */}
           <div className="flex items-center gap-2">
             {["bg-primary-medium", "bg-tertiary-medium", "bg-secondary-medium"].map((c, i) => (
               <div
@@ -272,17 +253,15 @@ export default function InterviewPage() {
               />
             ))}
           </div>
-
         </div>
       </div>
     );
   }
 
-  // ── Main interview screen ──────────────────────────────
+  //Main interview screen
   return (
     <div className="min-h-screen bg-[#f7f5ff] font-body flex flex-col">
 
-      {/* ── Topbar ────────────────────────────────────── */}
       <div className="bg-white border-b border-[#ede8fb] h-14 px-5 sm:px-8
                       flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
@@ -317,7 +296,6 @@ export default function InterviewPage() {
         </div>
       </div>
 
-      {/* ── Progress bar ──────────────────────────────── */}
       <div className="bg-white border-b border-[#ede8fb] px-5 sm:px-8 pb-3 pt-1">
         <div className="h-1 bg-[#ede8fb] rounded-full overflow-hidden">
           <div
@@ -327,10 +305,8 @@ export default function InterviewPage() {
         </div>
       </div>
 
-      {/* ── Body ──────────────────────────────────────── */}
       <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full px-5 sm:px-8 py-8 gap-6">
 
-        {/* Previous answer — faded, shown briefly after submit */}
         {showPrevAnswer && history.length > 0 && (
           <div className="flex gap-3 items-start opacity-40">
             <div className="w-8 h-8 rounded-full bg-secondary-light border border-secondary-medium/30
@@ -347,21 +323,17 @@ export default function InterviewPage() {
           </div>
         )}
 
-        {/* AI question bubble */}
         <div className="flex gap-3 items-start">
 
-          {/* AI avatar */}
           <div className="w-9 h-9 rounded-full bg-primary-medium flex items-center justify-center
                           flex-shrink-0 text-xs font-bold text-white">
             AI
           </div>
 
-          {/* Bubble */}
           <div className="bg-white border border-[#ede8fb] rounded-[4px_18px_18px_18px]
                           px-5 py-4 max-w-xl shadow-sm shadow-primary-medium/5">
 
             {aiLoading ? (
-              /* Typing animation */
               <div className="flex items-center gap-1.5 py-1">
                 {["bg-primary-medium", "bg-tertiary-medium", "bg-secondary-medium"].map((c, i) => (
                   <div
@@ -385,7 +357,6 @@ export default function InterviewPage() {
           </div>
         </div>
 
-        {/* ── Answer input — pushed to bottom ───────── */}
         <div className="mt-auto">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-2">
             Your Answer
@@ -434,7 +405,6 @@ export default function InterviewPage() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

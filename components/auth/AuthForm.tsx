@@ -1,5 +1,4 @@
-// components/auth/AuthForm.tsx
-// Client component — handles form state, validation, and submission
+// Client component- handles form state, validation, and submission
 // Parent page stays a server component and just passes down the mode prop
 
 "use client";
@@ -29,7 +28,6 @@ export default function AuthForm() {
     setLoading(true);
     
     const supabase = createClient();
-    // replace the signup block in handleSubmit
     if(mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -48,7 +46,7 @@ export default function AuthForm() {
       // With email verification on, session will be null until user confirms
       if (data.session === null) {
         setLoading(false);
-        setMode("verify"); // new mode — show confirmation message
+        setMode("verify"); // new mode, show confirmation message
         return;
       }
 
@@ -77,7 +75,7 @@ export default function AuthForm() {
       options: { redirectTo: `${location.origin}/auth/callback` },
     });
   }
-  // Shared input classes — defined once to keep JSX clean
+  // Shared input classes defined once to keep JSX clean
   const inputClass = `
     w-full border border-[#ede8fb] rounded-xl px-4 py-3 text-sm
     text-[#1a1a2e] bg-[#fafaf9] placeholder:text-[#9090b0]
@@ -118,13 +116,12 @@ export default function AuthForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
 
-      {/* Tabs — now use onClick instead of <Link> */}
       <div className="flex flex-row justify-between">
         <div className="flex bg-[#f7f5ff] rounded-xl p-1 mb-8 gap-1 w-fit">
           {(["login", "signup"] as const).map((m) => (
             <button
               key={m}
-             type="button"                    // important — prevents form submit
+             type="button"                    // importantprevents form submit
               onClick={() => setMode(m)}
               className={`px-6 py-2 rounded-[10px] text-xs font-semibold transition-all duration-200
                 ${mode === m
@@ -136,10 +133,9 @@ export default function AuthForm() {
              </button>
           ))}
         </div>
-      {/* OAuth buttons — icon only, like the inspo */}
+      {/* OAuth buttons icon only, like the inspo */}
       <div className="flex justify-center gap-3">
  
-        {/* Google */}
         <button
           type="button"
           onClick={() => handleOAuth("google")} 
@@ -157,7 +153,6 @@ export default function AuthForm() {
           </svg>
         </button>
  
-        {/* GitHub */}
         <button
           type="button"
           onClick={() => handleOAuth("github")} 
@@ -174,7 +169,6 @@ export default function AuthForm() {
  
       </div>
       </div>
-      {/* Name — signup only */}
       {mode === "signup" && (
         <div>
           <input
@@ -188,7 +182,6 @@ export default function AuthForm() {
         </div>
       )}
 
-      {/* Email */}
       <div>
         <input
           type="email"
@@ -200,7 +193,6 @@ export default function AuthForm() {
         />
       </div>
 
-      {/* Password */}
       <div>
         <input
           type="password"
@@ -213,7 +205,6 @@ export default function AuthForm() {
         />
       </div>
 
-      {/* Forgot password — login only */}
       {mode === "login" && (
         <div className="flex justify-end -mt-1">
           <a href="#" className="text-[11px] text-primary-medium hover:text-primary-dark transition-colors">
@@ -222,14 +213,12 @@ export default function AuthForm() {
         </div>
       )}
 
-      {/* Error */}
       {error && (
         <p className="text-xs text-[#DC2626] bg-[#FEF2F2] border border-[#FECACA] rounded-xl px-4 py-2.5">
           {error}
         </p>
       )}
 
-      {/* Submit — dark background like the inspo */}
       <button
         type="submit"
         disabled={loading}
@@ -241,7 +230,6 @@ export default function AuthForm() {
       >
         {loading ? "Please wait..." : mode === "login" ? "Log in" : "Create account"}
       </button>
-
     </form>
   );
 }

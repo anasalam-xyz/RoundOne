@@ -1,5 +1,4 @@
-// app/dashboard/history/HistoryClient.tsx
-// Client component — handles the filter toggle interactivity
+// Client component, handles the filter toggle interactivity
 // Receives all data as props from the server component parent
 
 "use client";
@@ -46,7 +45,7 @@ function scoreColor(score: number) {
   return { text: "text-[#DC2626]", bg: "bg-[#FEF2F2]" };
 }
 
-// Type pill colors — consistent with the rest of the app
+// Type pill colors- consistent with the rest of the app
 function typeStyle(type: string) {
   switch (type.toLowerCase()) {
     case "technical": return { bg: "bg-primary-light",   text: "text-primary-dark" };
@@ -73,7 +72,6 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
   return (
     <div className="max-w-4xl mx-auto space-y-5">
 
-      {/* ── Stat cards ─────────────────────────────────── */}
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: "Total Interviews", value: total,     color: "#7C52D9", pct: Math.min(total * 4, 100) },
@@ -103,7 +101,6 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
         ))}
       </div>
 
-      {/* ── Filter row ──────────────────────────────────── */}
       <div className="flex items-center gap-2 flex-wrap">
         {FILTERS.map((f) => (
           <button
@@ -128,7 +125,6 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
         </span>
       </div>
 
-      {/* ── Session list ────────────────────────────────── */}
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#ede8fb] py-16 text-center">
           <p className="text-sm text-[#9090b0]">No sessions found.</p>
@@ -155,7 +151,6 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
                            hover:border-primary-medium hover:shadow-lg hover:shadow-primary-medium/8
                            hover:-translate-y-px transition-all duration-200"
               >
-                {/* Role + meta */}
                 <div>
                   <p className="text-sm font-semibold text-[#1a1a2e] mb-0.5">
                     {session.role}
@@ -165,19 +160,16 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
                   </p>
                 </div>
 
-                {/* Type pill */}
                 <span className={`hidden sm:inline text-[10px] font-semibold px-3 py-1
                                   rounded-full ${ts.bg} ${ts.text}`}>
                   {session.type}
                 </span>
 
-                {/* Score */}
                 <span className={`text-sm font-bold px-3 py-1.5 rounded-xl font-mono
                                   ${sc.bg} ${sc.text}`}>
                   {session.score ?? "—"}
                 </span>
 
-                {/* View button */}
                 <Link
                   href={`/results/${session.id}`}
                   className="text-[11px] font-semibold text-primary-medium bg-primary-light
@@ -191,7 +183,6 @@ export default function HistoryClient({ sessions, total, avgScore, bestScore }: 
           })}
         </div>
       )}
-
     </div>
   );
 }

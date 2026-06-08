@@ -79,13 +79,11 @@ export default function Topbar({ initials, name }: { initials: string; name: str
             <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-[#ede8fb]
                             rounded-2xl shadow-xl shadow-primary-medium/10 overflow-hidden z-50
                             animate-[fadeIn_0.15s_ease]">
-              {/* User info header */}
               <div className="px-4 py-3 border-b border-[#f0ecfd]">
                 <p className="text-xs font-semibold text-[#1a1a2e]">{name}</p>
                 <p className="text-[10px] text-[#9090b0] mt-0.5">Free plan</p>
               </div>
 
-              {/* Menu items */}
               <Link
                 href="/dashboard/settings"
                 onClick={() => setOpen(false)}

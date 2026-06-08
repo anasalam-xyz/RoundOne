@@ -1,6 +1,5 @@
-// components/Navbar.tsx
 // Shown on all logged-out pages (landing, auth)
-// For logged-in users, the dashboard has its own sidebar — this navbar isn't used there
+// For logged-in users, the dashboard has its own sidebar. this navbar isn't used there
 "use client";
 
 import { useState } from "react";
@@ -57,19 +56,16 @@ export default function Navbar() {
         className="flex flex-col justify-center items-center w-8 h-8 space-y-1.5 md:hidden focus:outline-none relative z-50 cursor-pointer"
         aria-label="Toggle Menu"
       >
-        {/* Top Line */}
         <span
           className={`block h-0.5 w-6 bg-[#1a1a2e] rounded-full transform transition-all duration-400 ease-in-out ${
             isOpen ? 'rotate-45 translate-y-2' : ''
           }`}
         />
-        {/* Middle Line */}
         <span
           className={`block h-0.5 w-6 bg-[#1a1a2e] rounded-full transition-all duration-400 ease-in-out ${
             isOpen ? 'opacity-0 -translate-x-2' : 'opacity-100'
           }`}
         />
-        {/* Bottom Line */}
         <span
           className={`block h-0.5 w-6 bg-[#1a1a2e] rounded-full transform transition-all duration-400 ease-in-out ${
             isOpen ? '-rotate-45 -translate-y-2' : ''

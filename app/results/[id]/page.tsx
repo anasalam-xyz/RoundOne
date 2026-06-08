@@ -1,4 +1,3 @@
-// app/results/[id]/page.tsx
 // Shows full evaluation results after interview completes
 // Fetches session + questions from DB using the session ID from the URL
 
@@ -6,8 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Share2, RotateCcw, LayoutDashboard } from "lucide-react";
-
-// ── Helpers ────────────────────────────────────────────
 
 // Returns Tailwind color classes based on score
 function scoreColor(score: number) {
@@ -44,7 +41,7 @@ export default async function ResultsPage({
 
   if (sessionError || !session) notFound();
 
-  // If session isn't completed yet — evaluation still running
+  // If session isn't completed yet-> evaluation still running
   if (!session.completed) {
     redirect(`/interview/${id}`);
   }
@@ -70,7 +67,6 @@ export default async function ResultsPage({
     <div className="min-h-screen bg-[#f7f5ff] font-body">
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10">
 
-        {/* ── Topbar ──────────────────────────────────── */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Link href="/dashboard" className="text-base font-bold">
@@ -93,11 +89,9 @@ export default async function ResultsPage({
           </button>
         </div>
 
-        {/* ── Hero: score ring + verdict ───────────────── */}
         <div className="bg-white rounded-2xl border border-[#ede8fb] p-6 sm:p-8
                         mb-5 grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6 items-center">
 
-          {/* Score ring */}
           <div className="relative w-28 h-28 mx-auto sm:mx-0 flex-shrink-0">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
               <circle cx="50" cy="50" r="42" fill="none" stroke="#F0ECFD" strokeWidth="9" />
@@ -117,7 +111,6 @@ export default async function ResultsPage({
             </div>
           </div>
 
-          {/* Verdict + meta */}
           <div>
             <h3 className="md:px-4 font-display  text-[#1a1a2e] leading-snug mb-3"
               style={{fontSize:"1.2rem"}}>
@@ -140,7 +133,6 @@ export default async function ResultsPage({
           </div>
         </div>
 
-        {/* ── Stat cards ───────────────────────────────── */}
         <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-5">
           {[
             { label: "Overall Score", value: session.score ?? 0,  color: "#7C52D9" },
@@ -168,7 +160,6 @@ export default async function ResultsPage({
           ))}
         </div>
 
-        {/* ── Strengths + Weaknesses ───────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
 
           <div className="bg-white rounded-2xl border border-[#ede8fb] p-5">
@@ -200,7 +191,6 @@ export default async function ResultsPage({
           </div>
         </div>
 
-        {/* ── Per-question breakdown ───────────────────── */}
         <h2 className="font-display text-xl font-semibold text-[#1a1a2e] mb-4">
           Per-question breakdown
         </h2>
@@ -215,7 +205,6 @@ export default async function ResultsPage({
                            hover:border-primary-medium hover:shadow-lg hover:shadow-primary-medium/8
                            transition-all duration-200"
               >
-                {/* Question header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1">
                     <p className="text-[9px] font-bold text-primary-medium uppercase
@@ -232,7 +221,6 @@ export default async function ResultsPage({
                   </span>
                 </div>
 
-                {/* Score bar */}
                 <div className="h-1 bg-[#f0ecfd] rounded-full overflow-hidden mb-4">
                   <div
                     className="h-full rounded-full transition-all duration-500"
@@ -240,7 +228,6 @@ export default async function ResultsPage({
                   />
                 </div>
 
-                {/* Answer */}
                 {q.answer_text && (
                   <div className="bg-[#f7f5ff] rounded-xl px-4 py-3 mb-3">
                     <p className="text-[9px] font-bold text-[#9090b0] uppercase tracking-widest mb-1.5">
@@ -252,7 +239,6 @@ export default async function ResultsPage({
                   </div>
                 )}
 
-                {/* Feedback */}
                 {q.feedback && (
                   <div className="pt-3 border-t border-[#f0ecfd]">
                     <p className="text-[9px] font-bold text-[#9090b0] uppercase tracking-widest mb-1.5">
@@ -268,7 +254,6 @@ export default async function ResultsPage({
           })}
         </div>
 
-        {/* ── CTA row ──────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/interview/setup"
@@ -291,7 +276,6 @@ export default async function ResultsPage({
             Back to dashboard
           </Link>
         </div>
-
       </div>
     </div>
   );

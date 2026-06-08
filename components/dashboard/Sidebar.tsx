@@ -1,5 +1,5 @@
 // components/dashboard/Sidebar.tsx
-// Mini icon sidebar — 72px wide, icon + label per item, avatar at bottom
+// Mini icon sidebar 
 // "use client" is required because usePathname() is a client-side hook
 
 "use client";
@@ -79,7 +79,6 @@ export default function Sidebar({ initials }: { initials: string }) {
       {/* Nav links */}
       <nav className="flex flex-row md:flex-col items-center gap-1 flex-1 w-full px-2">
         {navItems.map((item) => {
-          // Exact match for /dashboard root, prefix match for sub-routes
           const isActive =
             item.href === "/dashboard"
               ? pathname === "/dashboard"
@@ -103,7 +102,6 @@ export default function Sidebar({ initials }: { initials: string }) {
         })}
       </nav>
 
-      {/* User avatar — replace "AN" with first+last initials from session.user.name */}
       <div className="w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium
                       flex items-center justify-center cursor-pointer
                       hover:border-primary-medium transition-colors duration-200">

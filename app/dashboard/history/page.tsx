@@ -1,4 +1,3 @@
-// app/dashboard/history/page.tsx
 // Shows all past interview sessions with stats and filtering
 // Server component for data fetching, client component for filter interactivity
 

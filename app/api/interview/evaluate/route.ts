@@ -1,6 +1,6 @@
 // app/api/interview/evaluate/route.ts
 import { createClient } from "@/lib/supabase/server";
-import { gemini } from "@/lib/ai/gemini";
+import { geminiEval } from "@/lib/ai/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 interface QAPair {
@@ -32,34 +32,14 @@ export async function POST(request: NextRequest) {
     ).join("\n\n");
 
     const prompt = `
-You are an expert interviewer evaluating a ${level} ${role} candidate in a ${type} interview.
+      Evaluate this ${level} ${role} ${type} interview. Return ONLY raw JSON, no markdown.
 
-Here are all the questions and answers:
+      ${qaText}
 
-${qaText}
+      JSON structure:
+      {"overallScore":<0-100>,"verdict":"<one sentence>","strengths":["x","x","x"],"weaknesses":["x","x","x"],"answers":[{"orderNum":<n>,"score":<0-100>,"feedback":"<2 sentences>"}]}
 
-Evaluate the candidate and respond with ONLY a valid JSON object in exactly this structure, no markdown, no explanation, just raw JSON:
-
-{
-  "overallScore": <number 0-100>,
-  "verdict": "<one sentence summary>",
-  "strengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
-  "weaknesses": ["<weakness 1>", "<weakness 2>", "<weakness 3>"],
-  "answers": [
-    {
-      "orderNum": <question number>,
-      "score": <number 0-100>,
-      "feedback": "<2-3 sentence specific feedback>"
-    }
-  ]
-}
-
-Scoring guidelines:
-- Consider answer quality, depth, and relevance
-- Factor in response confidence (time to first key) — longer hesitation slightly lowers score
-- Factor in fluency (words per second from answer duration)
-- Be honest but constructive
-- Overall score should reflect weighted average
+      Score on: answer quality, depth, relevance, confidence (time to first key), fluency (answer duration). Be honest and constructive.
     `.trim();
 
     const result  = await gemini.generateContent(prompt);

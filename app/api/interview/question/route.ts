@@ -3,7 +3,7 @@
 // Called from /interview/[id] after each answer is submitted
 
 import { createClient } from "@/lib/supabase/server";
-import { gemini } from "@/lib/ai/gemini";
+import { geminiQuestion } from "@/lib/ai/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -36,30 +36,21 @@ export async function POST(request: NextRequest) {
       .eq("order_num",  lastOrderNum);
     }
     // Build the prompt
+    const recentHistory = history.slice(-2);
+
     const historyText = history.length === 0
-      ? "This is the first question."
-      : history.map((h: { question: string; answer: string }, i: number) =>
-          `Q${i + 1}: ${h.question}\nA${i + 1}: ${h.answer}`
-        ).join("\n\n");
-
+    ? "This is the first question."
+    : recentHistory.map((h: { question: string; answer: string }) =>
+        `Q: ${h.question}\nA: ${h.answer}`
+      ).join("\n\n");
     const prompt = `
-You are a professional interviewer conducting a ${type} interview for a ${level} ${role} position.
-This is question ${questionNumber} of ${totalQuestions}.
+      You are interviewing a ${level} ${role} candidate. ${type} interview, question ${questionNumber} of ${totalQuestions}.
 
-Previous conversation:
-${historyText}
+      Recent context:
+      ${historyText}
 
-Generate the next interview question. Rules:
-- Ask exactly ONE question
-- Keep it concise and clear
-- Make it conversational and follow naturally from previous answers if any
-- For technical interviews: focus on ${role}-specific concepts, problem solving, real-world scenarios
-- For HR interviews: focus on behavioural, situational, and culture fit questions
-- For mixed: alternate between technical and HR
-- Do NOT number the question
-- Do NOT add any preamble or explanation, just the question itself
+      Ask the next interview question. One question only, no preamble, no numbering. Follow naturally from context. ${type === "technical" ? `Focus on ${role}-either a specific concept or real scenarios.` : type === "hr" ? "Focus on behavioural and situational questions." : "Alternate between technical and HR questions."}
     `.trim();
-
     const result = await gemini.generateContent(prompt);
     const question = result.response.text().trim();
 

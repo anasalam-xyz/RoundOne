@@ -1,5 +1,4 @@
-// app/dashboard/settings/SettingsClient.tsx
-// Handles all settings interactivity — profile update, password change, sign out, delete account
+// Handles all settings interactivity profile update, password change, sign out, delete account
 
 "use client";
 
@@ -14,7 +13,7 @@ interface Props {
   memberSince: string;
 }
 
-// Generates initials from a name string — "Anas Khan" → "AK"
+// Generates initials from a name string
 function getInitials(name: string) {
   return name
     .split(" ")
@@ -24,7 +23,7 @@ function getInitials(name: string) {
     .slice(0, 2) || "?";
 }
 
-// Formats a date string to "Month Year" — "2025-06-01" → "June 2025"
+// Formats a date string to "Month Year","2025-06-01" → "June 2025"
 function formatMemberSince(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "long",
@@ -36,23 +35,19 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
   const router   = useRouter();
   const supabase = createClient();
 
-  // ── Profile state ──────────────────────────────────
   const [displayName,    setDisplayName]    = useState(name);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileMsg,     setProfileMsg]     = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  // ── Password state ─────────────────────────────────
   const [currentPassword,  setCurrentPassword]  = useState("");
   const [newPassword,      setNewPassword]      = useState("");
   const [confirmPassword,  setConfirmPassword]  = useState("");
   const [passwordLoading,  setPasswordLoading]  = useState(false);
   const [passwordMsg,      setPasswordMsg]      = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  // ── Danger zone state ──────────────────────────────
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // ── Update profile name ────────────────────────────
   async function handleProfileSave() {
     if (!displayName.trim()) return;
     setProfileLoading(true);
@@ -72,7 +67,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
     setProfileLoading(false);
   }
 
-  // ── Change password ────────────────────────────────
   async function handlePasswordChange() {
     setPasswordMsg(null);
 
@@ -113,17 +107,15 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
     setPasswordLoading(false);
   }
 
-  // ── Sign out ───────────────────────────────────────
   async function handleSignOut() {
     await supabase.auth.signOut();
     router.push("/");
   }
 
-  // ── Delete account ─────────────────────────────────
   async function handleDeleteAccount() {
     setDeleteLoading(true);
 
-    // Delete via API route — client can't call admin functions directly
+    // Delete via API route ,client can't call admin functions directly
     const res = await fetch("/api/account/delete", { method: "DELETE" });
 
     if (res.ok) {
@@ -148,14 +140,12 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
   return (
     <div className="max-w-3xl mx-auto space-y-5">
 
-      {/* ── Profile card ──────────────────────────────── */}
       <div className="bg-white rounded-2xl border border-[#ede8fb] p-6 sm:p-8">
         <div className="mb-6">
           <h2 className="font-display text-xl font-semibold text-[#1a1a2e] mb-4">Profile</h2>
           <p className="text-xs text-[#9090b0]">Update your display name and account info</p>
         </div>
 
-        {/* Avatar row */}
         <div className="flex items-center gap-4 mb-6 pb-6 border-b border-[#f0ecfd]">
           <div className="w-14 h-14 rounded-full bg-tertiary-light border-2 border-tertiary-medium
                           flex items-center justify-center flex-shrink-0
@@ -170,7 +160,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
           </div>
         </div>
 
-        {/* Success / error message */}
         {profileMsg && (
           <div className={`text-xs px-4 py-2.5 rounded-xl mb-4 border
             ${profileMsg.type === "success"
@@ -224,7 +213,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
         </button>
       </div>
 
-      {/* ── Password card ─────────────────────────────── */}
       <div className="bg-white rounded-2xl border border-[#ede8fb] p-6 sm:p-8">
         <div className="mb-6">
           <h2 className="font-display text-xl font-semibold text-[#1a1a2e] mb-1">Change Password</h2>
@@ -275,7 +263,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
         </button>
       </div>
 
-      {/* ── Danger zone ───────────────────────────────── */}
       <div className="bg-white rounded-2xl border border-[#FECACA] p-6 sm:p-8">
         <div className="mb-6">
           <h2 className="font-display text-xl font-semibold text-[#DC2626] mb-1">Danger Zone</h2>
@@ -284,7 +271,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
 
         <div className="space-y-3">
 
-          {/* Sign out */}
           <div className="flex items-center justify-between py-3 border-b border-[#f0ecfd]">
             <div>
               <p className="text-sm font-semibold text-[#1a1a2e]">Sign out</p>
@@ -300,7 +286,6 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
             </button>
           </div>
 
-          {/* Delete account */}
           <div className="flex items-center justify-between py-3">
             <div>
               <p className="text-sm font-semibold text-[#1a1a2e]">Delete account</p>
@@ -339,10 +324,8 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
               </div>
             )}
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// app/dashboard/settings/page.tsx
 // Loads user profile server-side, passes to client component for interactivity
 
 import { createClient } from "@/lib/supabase/server";

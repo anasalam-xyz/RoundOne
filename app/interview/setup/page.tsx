@@ -1,6 +1,5 @@
-// app/interview/setup/page.tsx
 // User picks role, experience level, interview type, question count, and answer mode
-// All state is local — on submit, creates a session in DB and redirects to /interview/[id]
+// All state is local,, on submit, creates a session in DB and redirects to /interview/[id]
 // "use client" because the whole page is interactive selection UI
 
 "use client";
@@ -13,13 +12,11 @@ import {
   Keyboard, Mic, ArrowRight, ChevronLeft,
 } from "lucide-react";
 
-// ── Types ──────────────────────────────────────────────
 type Level      = "fresher" | "mid" | "senior";
 type InterviewType = "technical" | "hr" | "mixed";
 type QuestionCount = 5 | 10 | 15;
 type AnswerMode = "text" | "voice";
 
-// ── Data ───────────────────────────────────────────────
 
 // suggested roles as quick-fill chips
 const ROLE_SUGGESTIONS = [
@@ -48,7 +45,6 @@ const QUESTION_COUNTS: { value: QuestionCount; duration: string }[] = [
 export default function SetupPage() {
   const router = useRouter();
 
-  // ── Selections ────────────────────────────────────────
   const [role,      setRole]      = useState<string>("");
   const [level,     setLevel]     = useState<Level | null>(null);
   const [type,      setType]      = useState<InterviewType | null>(null);
@@ -85,7 +81,6 @@ export default function SetupPage() {
     router.push(`/interview/${data.sessionId}`);
   }
 
-  // ── Shared card class builder ─────────────────────────
   function cardClass(selected: boolean) {
     return `
       bg-white border rounded-2xl p-4 cursor-pointer
@@ -102,7 +97,6 @@ export default function SetupPage() {
     <div className="min-h-screen bg-[#f7f5ff] font-body">
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10">
 
-        {/* ── Top bar ─────────────────────────────────── */}
         <div className="flex items-center justify-between mb-10">
           <Link
             href="/dashboard"
@@ -113,7 +107,6 @@ export default function SetupPage() {
             Dashboard
           </Link>
 
-          {/* Progress dots */}
           <div className="flex items-center gap-1.5">
             {["Setup", "Interview", "Results"].map((s, i) => (
               <div
@@ -125,7 +118,6 @@ export default function SetupPage() {
           </div>
         </div>
 
-        {/* ── Heading ─────────────────────────────────── */}
         <div className="mb-10">
           <h1 className="font-display text-3xl sm:text-4xl font-semibold text-[#1a1a2e] mb-2">
             Set up your interview
@@ -135,13 +127,11 @@ export default function SetupPage() {
           </p>
         </div>
 
-        {/* ── Section: Role ────────────────────────────── */}
         <section className="mb-8">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-3">
             Role
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-           {/* Role input */}
             <input
               type="text"
               placeholder="e.g. Frontend Dev, Product Manager, QA Engineer..."
@@ -153,7 +143,6 @@ export default function SetupPage() {
                 transition-colors duration-200 mb-3"
             />
 
-            {/* Quick-fill chips */}
             <div className="flex flex-wrap gap-2">
               {ROLE_SUGGESTIONS.map((s) => (
                 <button
@@ -174,7 +163,6 @@ export default function SetupPage() {
           </div>
         </section>
 
-        {/* ── Section: Experience Level ────────────────── */}
         <section className="mb-8">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-3">
             Experience Level
@@ -199,7 +187,6 @@ export default function SetupPage() {
           </div>
         </section>
 
-        {/* ── Section: Interview Type ──────────────────── */}
         <section className="mb-8">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-3">
             Interview Type
@@ -224,7 +211,6 @@ export default function SetupPage() {
           </div>
         </section>
 
-        {/* ── Section: Question Count ──────────────────── */}
         <section className="mb-8">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-3">
             Number of Questions
@@ -255,14 +241,12 @@ export default function SetupPage() {
           </div>
         </section>
 
-        {/* ── Section: Answer Mode ─────────────────────── */}
         <section className="mb-10">
           <p className="text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-3">
             Answer Mode
           </p>
           <div className="grid grid-cols-2 gap-3">
 
-            {/* Text */}
             <div
               onClick={() => setMode("text")}
               className={`flex items-center gap-3 rounded-2xl border p-4 cursor-pointer
@@ -287,7 +271,6 @@ export default function SetupPage() {
               </div>
             </div>
 
-            {/* Voice — disabled, coming soon */}
             <div
               className="flex items-center gap-3 rounded-2xl border border-[#ede8fb]
                          bg-white p-4 opacity-50 cursor-not-allowed"
@@ -311,7 +294,6 @@ export default function SetupPage() {
           </div>
         </section>
 
-        {/* ── Footer: validation hint + start button ───── */}
         <div className="flex items-center justify-between">
           {!canStart ? (
             <p className="text-xs text-[#9090b0]">
@@ -337,7 +319,6 @@ export default function SetupPage() {
             {!loading && <ArrowRight size={16} />}
           </button>
         </div>
-
       </div>
     </div>
   );
