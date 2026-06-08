@@ -7,7 +7,7 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { Mail } from "lucide-react";
+import { Mail, Eye, EyeOff  } from "lucide-react";
 
 type Mode = "login" | "signup" | "verify";
 
@@ -21,6 +21,9 @@ export default function AuthForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,7 +70,19 @@ export default function AuthForm() {
       router.push("/dashboard");
     }
   }
-
+  async function handleForgotPassword() {
+  if (!email) {
+    setError("Enter your email address first.");
+    return;
+  }
+  setResetLoading(true);
+  const supabase = createClient();
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${location.origin}/auth/reset-password`,
+  });
+  setResetSent(true);
+  setResetLoading(false);
+}
   async function handleOAuth(provider: "google" | "github") {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
@@ -193,23 +208,38 @@ export default function AuthForm() {
         />
       </div>
 
-      <div>
+      <div className="relative">
         <input
-          type="password"
-          required
-          minLength={8}
-          placeholder="Password"
+          type={showPassword ? "text" : "password"}
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className={inputClass}
         />
+        <button
+          type="button"
+          onClick={() => setShowPassword((p) => !p)}
+          className="absolute right-3 top-1/2 -translate-y-1/2
+               text-[#9090b0] hover:text-primary-medium transition-colors duration-200"
+        >
+          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+        </button>
       </div>
 
       {mode === "login" && (
         <div className="flex justify-end -mt-1">
-          <a href="#" className="text-[11px] text-primary-medium hover:text-primary-dark transition-colors">
-            Forgot password?
-          </a>
+          {resetSent ? (
+            <p className="text-[11px] text-[#16A34A]">Reset link sent — check your email.</p>
+          ) : (
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              disabled={resetLoading}
+              className="text-[11px] text-primary-medium hover:text-primary-dark transition-colors disabled:opacity-60"
+            >
+              {resetLoading ? "Sending..." : "Forgot password?"}
+            </button>
+          )}
         </div>
       )}
 

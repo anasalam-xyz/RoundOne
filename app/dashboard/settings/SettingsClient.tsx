@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Eye, EyeOff } from "lucide-react";
 
 interface Props {
   userId:      string;
@@ -47,6 +48,10 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
 
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   async function handleProfileSave() {
     if (!displayName.trim()) return;
@@ -231,21 +236,31 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
 
         <div className="space-y-4">
           {[
-            { label: "Current Password",  value: currentPassword,  setter: setCurrentPassword },
-            { label: "New Password",      value: newPassword,      setter: setNewPassword },
-            { label: "Confirm New Password", value: confirmPassword, setter: setConfirmPassword },
+            { label: "Current Password",  value: currentPassword,  setter: setCurrentPassword, showPassword: showCurrentPassword, setShowPassword: setShowCurrentPassword},
+            { label: "New Password",      value: newPassword,      setter: setNewPassword, showPassword: showNewPassword, setShowPassword: setShowNewPassword},
+            { label: "Confirm New Password", value: confirmPassword, setter: setConfirmPassword, showPassword: showConfirmPassword, setShowPassword: setShowConfirmPassword},
           ].map((field) => (
             <div key={field.label}>
               <label className="block text-[10px] font-semibold text-[#9090b0] uppercase tracking-widest mb-2">
                 {field.label}
               </label>
-              <input
-                type="password"
-                value={field.value}
-                onChange={(e) => field.setter(e.target.value)}
-                placeholder="••••••••"
-                className={inputClass}
-              />
+              <div className="relative">
+                <input
+                  type={field.showPassword ? "text" : "password"}
+                  value={field.value}
+                  onChange={(e) => field.setter(e.target.value)}
+                  placeholder="••••••••"
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={() => field.setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2
+                    text-[#9090b0] hover:text-primary-medium transition-colors duration-200"
+                >
+                  {field.showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
           ))}
         </div>
