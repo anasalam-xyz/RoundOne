@@ -72,8 +72,8 @@ export default function Sidebar({ initials }: { initials: string }) {
       {/* Logo mark */}
       <Link href="/dashboard" className="mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
-                        hover:bg-primary-dark transition-colors duration-200">
-          <Image src="/round-one.png" 
+                        hover:shadow-sm shadow-primary-medium transition-shadow duration-400">
+          <Image src="/round-one_logo.png" 
             width={0} 
             height={0} 
             className="w-9 h-9 rounded-xl"

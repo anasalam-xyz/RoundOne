@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { SendHorizonal, StopCircle, Mic, MicOff, Volume2 } from "lucide-react";
+import { SendHorizonal, StopCircle, Mic, MicOff, Volume2, Sparkles } from "lucide-react";
 
 interface QAPair {
   question:       string;
@@ -66,6 +66,7 @@ export default function InterviewPage() {
   const hasTyped           = useRef(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const hasFetchedRef = useRef(false);
 
   //Check voice support on mount
   useEffect(() => {
@@ -85,7 +86,10 @@ export default function InterviewPage() {
 
   //Start interview once config is loaded
   useEffect(() => {
-    if (sessionConfig) fetchNextQuestion([]);
+    if (sessionConfig && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetchNextQuestion([]);
+    }
   }, [sessionConfig]);
 
   //Cycle analyzing messages
@@ -342,9 +346,7 @@ export default function InterviewPage() {
                             animate-[ping_1.5s_ease-in-out_infinite]" />
             <div className="w-16 h-16 rounded-full bg-primary-light border border-primary-medium/20
                             flex items-center justify-center">
-              <svg width="24" height="24" fill="none" stroke="#7C52D9" strokeWidth="1.8" viewBox="0 0 24 24">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-              </svg>
+                <Sparkles />
             </div>
           </div>
 

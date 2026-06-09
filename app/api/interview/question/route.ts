@@ -54,14 +54,24 @@ export async function POST(request: NextRequest) {
     const result = await geminiQuestion.generateContent(prompt);
     const question = result.response.text().trim();
 
-    // Save question to DB
-    const { error } = await supabase
+    // check if question already exists for this order_num
+    const { data: existing } = await supabase
       .from("questions")
-      .insert({
-        session_id:    sessionId,
-        question_text: question,
-        order_num:     questionNumber,
-      });
+      .select("id")
+      .eq("session_id", sessionId)
+      .eq("order_num", questionNumber)
+      .single();
+
+    // only insert if it doesn't already exist
+    if (!existing) {
+      await supabase
+        .from("questions")
+        .insert({
+          session_id:    sessionId,
+          question_text: question,
+          order_num:     questionNumber,
+        });
+    }
 
     if (error) {
       console.error("Question insert error:", error);
