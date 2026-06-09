@@ -23,8 +23,26 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RoundOne — AI Mock Interview",
-  description: "Practice interviews with AI. Get scored, get better.",
+  title: {
+    default: "RoundOne — AI Mock Interview",
+    template: "%s | RoundOne", // page-specific titles append this
+  },
+  description: "Practice job interviews with AI. Get scored, get detailed feedback, and track your improvement over time.",
+  keywords: ["mock interview", "AI interview", "interview practice", "frontend developer interview"],
+  authors: [{ name: "Anas" }],
+  openGraph: {
+    title: "RoundOne — AI Mock Interview",
+    description: "Practice job interviews with AI. Get scored, get detailed feedback.",
+    url: "https://todo...",
+    siteName: "RoundOne",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RoundOne — AI Mock Interview",
+    description: "Practice job interviews with AI. Get scored, get detailed feedback.",
+  },
+  metadataBase: new URL("https://todo..."), // required for og:image absolute URLs
 };
 
 export default function RootLayout({

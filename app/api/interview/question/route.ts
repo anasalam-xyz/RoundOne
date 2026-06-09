@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
       Ask the next interview question. One question only, no preamble, no numbering. Follow naturally from context. ${type === "technical" ? `Focus on ${role}-either a specific concept or real scenarios.` : type === "hr" ? "Focus on behavioural and situational questions." : "Alternate between technical and HR questions."}
     `.trim();
-    const result = await gemini.generateContent(prompt);
+    const result = await geminiQuestion.generateContent(prompt);
     const question = result.response.text().trim();
 
     // Save question to DB

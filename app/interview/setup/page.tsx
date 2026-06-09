@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -51,6 +51,12 @@ export default function SetupPage() {
   const [count,     setCount]     = useState<QuestionCount>(10);
   const [mode,      setMode]      = useState<AnswerMode>("text");
   const [loading,   setLoading]   = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+// check on mount - voice mode only supported on Google chrome
+  useEffect(() => {
+    const supported = "webkitSpeechRecognition" in window || "SpeechRecognition" in window;
+    setVoiceSupported(supported);
+  }, []);
 
   // All required fields filled
   const canStart = role.trim().length > 0 && level && type;
@@ -67,6 +73,7 @@ export default function SetupPage() {
         level,
         type,
         questionCount: count,
+        mode,
       }),
     });
 
@@ -272,25 +279,36 @@ export default function SetupPage() {
             </div>
 
             <div
-              className="flex items-center gap-3 rounded-2xl border border-[#ede8fb]
-                         bg-white p-4 opacity-50 cursor-not-allowed"
-              title="Voice mode coming soon"
+              onClick={() => voiceSupported && setMode("voice")}
+              className={`flex items-center gap-3 rounded-2xl border p-4
+                transition-all duration-200
+                ${!voiceSupported
+                  ? "border-[#ede8fb] bg-white opacity-50 cursor-not-allowed"
+                  : mode === "voice"
+                  ? "border-primary-medium bg-primary-light cursor-pointer hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary-medium/10"
+                  : "border-[#ede8fb] bg-white cursor-pointer hover:-translate-y-0.5 hover:border-primary-medium hover:shadow-lg hover:shadow-primary-medium/10"
+                }`}
+              title={!voiceSupported ? "Voice mode requires Chrome" : ""}
             >
-              <div className="w-10 h-10 rounded-xl bg-[#f7f5ff] flex items-center justify-center flex-shrink-0 text-[#9090b0]">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+                   ${mode === "voice" && voiceSupported ? "bg-white text-primary-medium" : "bg-[#f7f5ff] text-[#9090b0]"}`}>
                 <Mic size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-[#1a1a2e] flex items-center gap-2">
+                <h4 className={`text-sm font-semibold flex items-center gap-2
+                    ${mode === "voice" && voiceSupported ? "text-primary-dark" : "text-[#1a1a2e]"}`}>
                   Voice
-                  <span className="text-[9px] font-semibold bg-[#ede8fb] text-[#9090b0]
-                                   px-2 py-0.5 rounded-full">
-                    Soon
-                  </span>
+                  {!voiceSupported && (
+                    <span className="text-[9px] font-semibold bg-[#ede8fb] text-[#9090b0] px-2 py-0.5 rounded-full">
+                      Chrome only
+                    </span>
+                  )}
                 </h4>
-                <p className="text-[11px] text-[#9090b0]">Speak your answers</p>
+                <p className={`text-[11px] ${mode === "voice" && voiceSupported ? "text-primary-medium" : "text-[#9090b0]"}`}>
+                  {voiceSupported ? "Speak your answers" : "Not supported in this browser"}
+                </p>
               </div>
-            </div>
-
+            </div>          
           </div>
         </section>
 

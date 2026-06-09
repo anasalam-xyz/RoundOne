@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get setup choices from request body
-    const { role, level, type, questionCount } = await request.json();
+    const { role, level, type, questionCount, mode } = await request.json();
 
     // Basic validation
     if (!role || !level || !type || !questionCount) {
@@ -30,12 +30,13 @@ export async function POST(request: NextRequest) {
     const { data: session, error } = await supabase
       .from("sessions")
       .insert({
-        user_id:        user.id,
+        user_id: user.id,
         role,
         level,
         type,
-        question_count: questionCount,
-        completed:      false,
+        question_count: 1, //questionCount,
+        mode: mode ?? "text",
+        completed: false,
       })
       .select()
       .single();

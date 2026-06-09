@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       Score on: answer quality, depth, relevance, confidence (time to first key), fluency (answer duration). Be honest and constructive.
     `.trim();
 
-    const result  = await gemini.generateContent(prompt);
+    const result  = await geminiEval.generateContent(prompt);
     const rawText = result.response.text().trim();
 
     let evaluation;

@@ -19,7 +19,7 @@ export async function GET(
 
   const { data: session, error } = await supabase
     .from("sessions")
-    .select("role, level, type, question_count")
+    .select("role, level, type, question_count, mode")
     .eq("id", id)
     .eq("user_id", user.id) // RLS double-check
     .single();
@@ -33,5 +33,6 @@ export async function GET(
     level:         session.level,
     type:          session.type,
     questionCount: session.question_count,
+    mode:          session.mode,
   });
 }

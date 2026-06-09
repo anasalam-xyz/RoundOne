@@ -6,6 +6,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const navItems = [
   {
@@ -72,7 +73,12 @@ export default function Sidebar({ initials }: { initials: string }) {
       <Link href="/dashboard" className="mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
                         hover:bg-primary-dark transition-colors duration-200">
-          <span className="text-white font-bold text-xs">{initials}</span>
+          <Image src="/round-one.png" 
+            width={0} 
+            height={0} 
+            className="w-9 h-9 rounded-xl"
+            alt="rount-one_logo"
+          />
         </div>
       </Link>
 
