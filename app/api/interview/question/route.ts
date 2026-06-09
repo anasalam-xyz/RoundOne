@@ -64,19 +64,18 @@ export async function POST(request: NextRequest) {
 
     // only insert if it doesn't already exist
     if (!existing) {
-      await supabase
+      const { error: insertError } = await supabase
         .from("questions")
         .insert({
           session_id:    sessionId,
           question_text: question,
           order_num:     questionNumber,
         });
+      if (insertError) {
+        console.error("Question insert error:", insertError);
+      }
     }
-
-    if (error) {
-      console.error("Question insert error:", error);
-    }
-
+    
     return NextResponse.json({ question });
 
   } catch (err) {

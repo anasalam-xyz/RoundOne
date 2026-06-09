@@ -2,6 +2,7 @@ import Link from "next/link";
 import AuthForm from "@/components/auth/AuthForm";
 import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
+import { Suspense } from "react";
 
 export default function AuthPage() {
 
@@ -26,8 +27,15 @@ export default function AuthPage() {
         <p className="text-sm text-[#9090b0] leading-relaxed mb-8 max-w-xs">
           AI-powered mock interviews. Real feedback. Free forever.
         </p>
-
-        <AuthForm /> 
+        <Suspense fallback={
+          <div className="w-full max-w-sm space-y-4">
+            {[1,2,3].map(i => (
+              <div key={i} className="h-11 bg-[#f7f5ff] rounded-xl animate-pulse" />
+            ))}
+          </div>
+        }>
+          <AuthForm />
+        </Suspense>
       </div>
 
       <div className="hidden md:flex flex-col items-center justify-center bg-[#f7f5ff] px-20 gap-7">
