@@ -151,7 +151,7 @@ export default function InterviewPage() {
     fetchNextQuestion(rebuiltHistory);
   } 
   //Fetch next question
-  async function fetchNextQuestion(prevHistory: QAPair[]) {
+  async function fetchNextQuestion(prevHistory: QAPair[], retryCount = 0) {
     setAiLoading(true);
     setQuestionError(false);
     setQuestion("");
@@ -177,26 +177,31 @@ export default function InterviewPage() {
       });
 
       const data = await res.json();
-      if(!res.ok) throw new Error(data.message ?? "Failed to fetch question");
+
+      if (!res.ok) throw new Error(data.message ?? "Failed");
+
       setQuestion(data.question);
       setAiLoading(false);
-
       questionRenderedAt.current = Date.now();
       firstKeyAt.current         = 0;
       hasTyped.current           = false;
 
-      // Auto-focus textarea in text mode
       if (sessionConfig.mode === "text") {
         setTimeout(() => textareaRef.current?.focus(), 100);
       }
 
     } catch (err) {
-      console.error("Failed to fetch question:", err);
-      setAiLoading(false);
-      setQuestionError(true);
+      if (retryCount < 3) {
+        // wait 2 seconds then silently retry
+        setTimeout(() => fetchNextQuestion(prevHistory, retryCount + 1), 2000);
+      } else {
+        // all 3 retries failed — show retry button
+        console.error("Failed to fetch question after 3 retries:", err);
+        setAiLoading(false);
+        setQuestionError(true);
+      } 
     }
   }
-
   //Voice recording
   function startRecording() {
     if (!voiceSupported) return;
@@ -505,9 +510,10 @@ export default function InterviewPage() {
                 ))}
                   </div>
             ) : questionError ? (
-                // error + retry
-              <div className="flex items-center gap-3">
-                <p className="text-xs text-[#DC2626]">Failed to load question.</p>
+              // error + retry
+            <div className="flex items-center gap-3">
+              <p className="text-xs text-[#DC2626]">Failed to load question.</p>
+                <p className="text-xs text-[#DC2626]">Please try again later.</p>
                 <button
                   onClick={() => fetchNextQuestion(history)}
                   className="text-xs font-semibold text-primary-medium bg-primary-light
