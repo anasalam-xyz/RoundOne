@@ -26,6 +26,9 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/auth/callback")) {
+    return supabaseResponse;
+  }
 
   // Logged-out user trying to access protected routes → send to /auth
   if (!user && pathname.startsWith("/dashboard")) {
