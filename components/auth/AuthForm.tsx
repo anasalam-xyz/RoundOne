@@ -37,11 +37,9 @@ export default function AuthForm() {
         password,
         options: {
           data: { name },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
-console.log("signup data.session:", data.session);
-console.log("signup data.user:", data.user);
-console.log("signup error:", error);
       if(error) {
         setError(error.message);
         setLoading(false);

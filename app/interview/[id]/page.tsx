@@ -21,6 +21,7 @@ interface SessionConfig {
   type:          string;
   questionCount: number;
   mode:          "text" | "voice";
+  answeredCount: number;
 }
 
 type RecordingState = "idle" | "recording" | "processing";
@@ -58,6 +59,9 @@ export default function InterviewPage() {
   const [recordingState,   setRecordingState]   = useState<RecordingState>("idle");
   const [voiceSupported,   setVoiceSupported]   = useState(false);
   const [interimTranscript, setInterimTranscript] = useState("");
+
+  const [questionError, setQuestionError] = useState(false);
+
   const recognitionRef = useRef<any>(null);
 
   //Silent time tracking
@@ -88,7 +92,13 @@ export default function InterviewPage() {
   useEffect(() => {
     if (sessionConfig && !hasFetchedRef.current) {
       hasFetchedRef.current = true;
-      fetchNextQuestion([]);
+      if (sessionConfig.answeredCount > 0) {
+      // resume interview:  fetch answered Q&As from DB and rebuild history
+        resumeSession();
+      } 
+      else {
+        fetchNextQuestion([]);
+      }    
     }
   }, [sessionConfig]);
 
@@ -120,9 +130,24 @@ export default function InterviewPage() {
     window.speechSynthesis.speak(utterance);
   }
 
+  async function resumeSession() {
+    if (!sessionConfig) return;
+
+    const rebuiltHistory: QAPair[] = sessionConfig.answeredQuestions.map((q: any) => ({
+      question:       q.question_text,
+      answer:         q.answer_text,
+      timeToFirstKey: q.time_to_first_key ?? 0,
+      answerDuration: q.answer_duration ?? 0,
+    }));
+
+    setHistory(rebuiltHistory);
+    setCurrentQ(rebuiltHistory.length + 1);
+    fetchNextQuestion(rebuiltHistory);
+  } 
   //Fetch next question
   async function fetchNextQuestion(prevHistory: QAPair[]) {
     setAiLoading(true);
+    setQuestionError(false);
     setQuestion("");
     setShowPrevAnswer(false);
     setAnswer("");
@@ -161,6 +186,7 @@ export default function InterviewPage() {
     } catch (err) {
       console.error("Failed to fetch question:", err);
       setAiLoading(false);
+      setQuestionError(true);
     }
   }
 
@@ -437,10 +463,8 @@ export default function InterviewPage() {
         </div>
       </div>
 
-      {/* ── Body ────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full px-5 sm:px-8 py-8 gap-6">
 
-        {/* Previous answer — faded */}
         {showPrevAnswer && history.length > 0 && (
           <div className="flex gap-3 items-start opacity-40">
             <div className="w-8 h-8 rounded-full bg-secondary-light border border-secondary-medium/30
@@ -466,31 +490,32 @@ export default function InterviewPage() {
           <div className="bg-white border border-[#ede8fb] rounded-[4px_18px_18px_18px]
                           px-5 py-4 max-w-xl shadow-sm shadow-primary-medium/5 flex-1">
             {aiLoading ? (
+            // typing dots
               <div className="flex items-center gap-1.5 py-1">
                 {["bg-primary-medium", "bg-tertiary-medium", "bg-secondary-medium"].map((c, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full ${c} animate-bounce`}
-                    style={{ animationDelay: `${i * 0.15}s` }}
-                  />
+                  <div key={i} className={`w-2 h-2 rounded-full ${c} animate-bounce`}
+                      style={{ animationDelay: `${i * 0.15}s` }} />
                 ))}
+                  </div>
+            ) : questionError ? (
+                // error + retry
+              <div className="flex items-center gap-3">
+                <p className="text-xs text-[#DC2626]">Failed to load question.</p>
+                <button
+                  onClick={() => fetchNextQuestion(history)}
+                  className="text-xs font-semibold text-primary-medium bg-primary-light
+                  px-3 py-1.5 rounded-lg hover:bg-primary-medium hover:text-white
+                  transition-all duration-200"
+                >
+                  Retry
+                </button>
               </div>
             ) : (
+              // normal question display
               <>
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-[10px] font-semibold text-primary-medium uppercase tracking-widest">
-                    Question {currentQ}
-                  </p>
-                  {isVoiceMode && (
-                    <button
-                      onClick={() => speakQuestion(question)}
-                      className="text-[#9090b0] hover:text-primary-medium transition-colors duration-200"
-                      title="Read question aloud"
-                    >
-                      <Volume2 size={14} />
-                    </button>
-                  )}
-                </div>
+                <p className="text-[10px] font-semibold text-primary-medium uppercase tracking-widest mb-2">
+                  Question {currentQ}
+                </p>
                 <p className="text-sm sm:text-base text-[#1a1a2e] leading-relaxed">
                   {question}
                 </p>
