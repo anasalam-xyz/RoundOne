@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { LayoutDashboard } from "lucide-react";
 
-function BackToDashboard() {
+export default function BackToDashboard() {
   const router = useRouter();
   return (
     <button
