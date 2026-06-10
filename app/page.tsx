@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function LandingPage() {
   return (
     <main className="bg-[#f7f5ff] min-h-screen font-body">
-      <section className="max-w-6xl mx-auto px-12 pt-20 pb-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <section className="max-w-6xl mx-auto px-8 md:px-12 pt-20 pb-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div>
           <span className="inline-block bg-primary-light text-primary-medium text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide">
             AI-Powered Interview Practice

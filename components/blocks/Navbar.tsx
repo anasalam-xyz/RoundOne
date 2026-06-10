@@ -15,7 +15,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white border-b border-[#ede8fb] px-12 h-16 flex items-center justify-between font-body">
+    <nav className="bg-white border-b border-[#ede8fb] px-8 md:px-12 h-16 flex items-center justify-between font-body">
 
       <Link href="." className="text-xl font-bold flex gap-0.5">
         <span className="text-secondary-medium">Round</span>
