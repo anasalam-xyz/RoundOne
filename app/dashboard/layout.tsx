@@ -33,11 +33,11 @@ export default async function DashboardLayout({
   return (
     // h-screen + overflow-hidden = the page never scrolls as a whole
     // only the <main> content area scrolls independently
-    <div className="flex flex-col-reverse md:flex-row min-h-screen bg-[#f7f5ff] font-body overflow-hidden" style={{ height: '100dvh' }}>
+    <div className="flex flex-col md:flex-row bg-[#f7f5ff] font-body" style={{ height: '100dvh' }}>
       <Sidebar initials={initials} />
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden order-1">
         <Topbar initials={initials} name={name.split(" ")[0] || "You"}/>
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-5 md:p-8 pb-24 md:pb-8">
           {children}
         </main>
       </div>

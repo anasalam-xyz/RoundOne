@@ -66,9 +66,17 @@ export default function Sidebar({ initials }: { initials: string }) {
   const pathname = usePathname();
 
   return (
-    <aside className="px-8 md:px-0 w-full md:w-[72px] md:h-screen bg-white border-r border-[#ede8fb]
-                      flex flex-row md:flex-col items-center py-5 flex-shrink-0">
-
+    <aside 
+      className={`
+        fixed bottom-0 left-0 right-0 z-50
+        md:static md:w-[72px] md:h-auto
+        bg-white border-t md:border-t-0 md:border-r border-[#ede8fb]
+        flex flex-row md:flex-col items-center
+        px-4 py-2 md:py-5
+        md:flex-shrink-0
+      `}
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       {/* Logo mark */}
       <Link href="/dashboard" className="hidden md:block mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
