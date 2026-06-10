@@ -48,7 +48,7 @@ export default function Topbar({ initials, name }: { initials: string; name: str
                      px-4 py-2 rounded-lg transition-all duration-200
                      hover:-translate-y-px hover:shadow-lg hover:shadow-primary-medium/25"
         >
-          + New Interview
+          + <span className="hidden md:inline-flex">New Interview</span>
         </Link>
 
         {/* User pill with dropdown */}
@@ -63,7 +63,7 @@ export default function Topbar({ initials, name }: { initials: string; name: str
                             flex items-center justify-center">
               <span className="text-[8px] font-bold text-tertiary-dark">{initials}</span>
             </div>
-            <span className="text-xs font-medium text-[#1a1a2e]">{name}</span>
+            <span className="hidden md:block text-xs font-medium text-[#1a1a2e]">{name}</span>
             {/* Chevron */}
             <svg
               width="12" height="12" fill="none" stroke="#9090b0" strokeWidth="2"
