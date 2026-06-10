@@ -2,13 +2,13 @@
 // Logged-in users are redirected to /dashboard from proxy.ts
 
 import Image from "next/image";
-import { ArrowRight, ArrowRightToLine, MoveRight, Settings2, BotMessageSquare, ChartColumn, BookHeart, PenLine, Timer, FileClock, UsersRound, Share2} from "lucide-react";
+import { ArrowRight, ArrowRightToLine, MoveRight, Settings2, BotMessageSquare, ChartColumn, BookHeart, PenLine, Timer, FileClock, UsersRound, Share2, TrendingUp} from "lucide-react";
 import Link from "next/link";
 
 export default function LandingPage() {
   return (
     <main className="bg-[#f7f5ff] min-h-screen font-body">
-      <section className="max-w-6xl mx-auto px-8 md:px-12 pt-20 pb-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <section className="max-w-6xl mx-auto px-10 md:px-12 pt-20 pb-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div>
           <span className="inline-block bg-primary-light text-primary-medium text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide">
             AI-Powered Interview Practice
@@ -69,7 +69,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <div className="border-y border-[#ede8fb] bg-white px-12 py-5 flex items-center gap-8">
+      <div className="border-y border-[#ede8fb] bg-white px-10 md:px-12 py-5 flex items-center gap-8">
       </div>
 
       <section className="max-w-6xl mx-auto px-12 py-16">
@@ -114,7 +114,7 @@ export default function LandingPage() {
 
       <div className="h-px bg-[#ede8fb] mx-12" />
 
-      <section id="features" className="max-w-6xl mx-auto px-12 py-16">
+      <section id="features" className="max-w-6xl mx-auto px-10 md:px-12 py-16">
         <p className="text-xs font-semibold text-tertiary-medium tracking-widest uppercase mb-2">Features</p>
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-[#1a1a2e] mb-3">Everything you need to prepare</h2>
         <p className="text-[#5a5a7a] text-sm leading-relaxed mb-10 max-w-lg">
@@ -124,11 +124,11 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
             { icon: <BotMessageSquare/>, title: "Conversational AI", desc: "Questions adapt in real-time based on what you say — not a static question bank.", tag: "Gemini API", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
-            { icon: <PenLine/>, title: "Per-answer scoring", desc: "Each answer gets its own score and feedback, not just a final number.", tag: "Detailed", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
-            { icon: <Timer/>, title: "Pressure mode", desc: "Optional timer per question simulates the real pressure of an interview.", tag: "Optional", bg: "bg-tertiary-light", text: "text-tertiary-dark", hover: "hover:border-tertiary-medium hover:shadow-tertiary-medium/10" },
+            { icon: <PenLine/>, title: "Per-answer scoring", desc: "Each answer gets its own score and detailed feedback, not just a final number.", tag: "Detailed", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
             { icon: <FileClock/>, title: "Session history", desc: "All past interviews saved. Review full Q&A and feedback anytime.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
-            { icon: <UsersRound/>, title: "Multiple roles", desc: "Frontend, backend, data analyst — each with role-specific question sets.", tag: "Flexible", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
-            { icon: <Share2/>, title: "Shareable results", desc: "Generate a score card link to share on LinkedIn or with recruiters.", tag: "Coming soon", bg: "bg-tertiary-light", text: "text-tertiary-dark", hover: "hover:border-tertiary-medium hover:shadow-tertiary-medium/10" },
+            { icon: <UsersRound/>, title: "Any role, any level", desc: "Not just a fixed list — type in any role. Fresher, mid, or senior. Technical, HR, or mixed.", tag: "Flexible", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
+            { icon: <Share2/>, title: "Shareable results", desc: "Make your result public and share the link on LinkedIn or with recruiters.", tag: "One click", bg: "bg-tertiary-light", text: "text-tertiary-dark", hover: "hover:border-tertiary-medium hover:shadow-tertiary-medium/10" },
+            { icon: <TrendingUp/>, title: "Track your progress", desc: "Score trend chart and session history show how much you've improved over time.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
           ].map((feat) => (
             <div
               key={feat.title}
