@@ -39,7 +39,9 @@ export default function AuthForm() {
           data: { name },
         },
       });
-
+console.log("signup data.session:", data.session);
+console.log("signup data.user:", data.user);
+console.log("signup error:", error);
       if(error) {
         setError(error.message);
         setLoading(false);

@@ -70,7 +70,7 @@ export default function Sidebar({ initials }: { initials: string }) {
                       flex flex-row md:flex-col items-center py-5 flex-shrink-0">
 
       {/* Logo mark */}
-      <Link href="/dashboard" className="mb-6">
+      <Link href="/dashboard" className="hidden md:block mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
                         hover:shadow-sm shadow-primary-medium transition-shadow duration-400">
           <Image src="/round-one_logo.png" 
@@ -108,7 +108,7 @@ export default function Sidebar({ initials }: { initials: string }) {
         })}
       </nav>
 
-      <div className="w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium
+      <div className="hidden md:block w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium
                       flex items-center justify-center cursor-pointer
                       hover:border-primary-medium transition-colors duration-200">
         <span className="text-[9px] font-bold text-tertiary-dark">{initials}</span>

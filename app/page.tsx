@@ -72,7 +72,7 @@ export default function LandingPage() {
       <div className="border-y border-[#ede8fb] bg-white px-10 md:px-12 py-5 flex items-center gap-8">
       </div>
 
-      <section className="max-w-6xl mx-auto px-12 py-16">
+      <section className="max-w-6xl mx-auto px-10 md:px-12 py-16">
         <p className="text-xs font-semibold text-tertiary-medium tracking-widest uppercase mb-2">How it works</p>
         <h2 className="font-display text-3xl md:text-4xl font-semibold text-[#1a1a2e] mb-3">Four steps to interview-ready</h2>
         <p className="text-[#5a5a7a] text-sm leading-relaxed mb-10 max-w-lg">
