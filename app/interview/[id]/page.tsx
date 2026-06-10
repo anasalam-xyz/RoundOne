@@ -22,6 +22,12 @@ interface SessionConfig {
   questionCount: number;
   mode:          "text" | "voice";
   answeredCount: number;
+  answeredQuestions:  {
+    question_text:      string;
+    answer_text:        string;
+    time_to_first_key:  number | null;
+    answer_duration:    number | null;
+  }[];
 }
 
 type RecordingState = "idle" | "recording" | "processing";
