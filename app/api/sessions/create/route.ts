@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         role,
         level,
         type,
-        question_count: 1, //questionCount,
+        question_count: questionCount,
         mode: mode ?? "text",
         completed: false,
       })
