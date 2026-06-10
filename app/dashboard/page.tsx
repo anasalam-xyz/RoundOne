@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
+export const revalidate = 60;
+
 function scoreColor(score: number) {
   if (score >= 75) return { text: "text-[#16A34A]", bg: "bg-[#F0FDF4]" };
   if (score >= 50) return { text: "text-[#D97706]", bg: "bg-[#FFFBEB]" };

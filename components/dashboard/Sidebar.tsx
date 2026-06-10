@@ -72,7 +72,7 @@ export default function Sidebar({ initials }: { initials: string }) {
         md:static md:w-[72px] md:h-auto
         bg-white border-t md:border-t-0 md:border-r border-[#ede8fb]
         flex flex-row md:flex-col items-center
-        px-4 py-2 md:py-5
+        px-4 md:px-0 py-2 md:py-5
         md:flex-shrink-0
       `}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -80,7 +80,7 @@ export default function Sidebar({ initials }: { initials: string }) {
       {/* Logo mark */}
       <Link href="/dashboard" className="hidden md:block mb-6">
         <div className="w-9 h-9 rounded-xl bg-primary-medium flex items-center justify-center
-                        hover:shadow-sm shadow-primary-medium transition-shadow duration-400">
+                        hover:shadow-sm shadow-tertiary-medium transition-shadow duration-200">
           <Image src="/round-one_logo.png" 
             width={0} 
             height={0} 
@@ -116,8 +116,8 @@ export default function Sidebar({ initials }: { initials: string }) {
         })}
       </nav>
 
-      <div className="hidden md:block w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium
-                      flex items-center justify-center cursor-pointer
+      <div className="mb-4 hidden md:flex w-9 h-9 rounded-full bg-tertiary-light border-2 border-tertiary-medium 
+                      items-center justify-center cursor-pointer
                       hover:border-primary-medium transition-colors duration-200">
         <span className="text-[9px] font-bold text-tertiary-dark">{initials}</span>
       </div>

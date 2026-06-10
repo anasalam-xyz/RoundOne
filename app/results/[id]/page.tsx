@@ -7,6 +7,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { RotateCcw, LayoutDashboard } from "lucide-react";
 import ShareButton from "@/components/results/ShareButton";
+import BackToDashboard from "./BackToDashboard";
 
 function scoreColor(score: number) {
   if (score >= 75) return { text: "text-[#16A34A]", bg: "bg-[#F0FDF4]", bar: "#16A34A" };
@@ -240,15 +241,7 @@ export default async function ResultsPage({
               <RotateCcw size={15} />
               Try again
             </Link>
-            <Link
-              href="/dashboard"
-              className="flex items-center justify-center gap-2 bg-white text-primary-medium
-                         border border-[#ede8fb] hover:border-primary-medium
-                         text-sm font-semibold px-6 py-3 rounded-xl transition-all duration-200"
-            >
-              <LayoutDashboard size={15} />
-              Back to dashboard
-            </Link>
+            <BackToDashboard /> 
           </div>
         )}
 

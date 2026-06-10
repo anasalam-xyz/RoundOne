@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import HistoryClient from "./HistoryClient";
 
+export const revalidate = 60;
+
 export default async function HistoryPage() {
   const supabase = await createClient();
 
