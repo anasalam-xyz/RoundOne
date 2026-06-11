@@ -3,7 +3,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -24,7 +24,14 @@ export default function AuthForm() {
   const [resetSent, setResetSent] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  
+  const verified = searchParams.get("verified");
+  useEffect(() => {
+    if (verified === "true") {
+      router.push("/dashboard");
+    }
+  }, [verified]);
+  
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
