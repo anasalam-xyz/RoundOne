@@ -2,7 +2,8 @@ import Link from "next/link";
 import AuthForm from "@/components/auth/AuthForm";
 import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
-import { Suspense } from "react
+import { Suspense } from "react";
+import type { Metadata } from "next";
 
 export const metadata = {
   title:       "Sign in",

@@ -63,10 +63,10 @@ export async function POST(request: NextRequest) {
 
     let result;
     try {
-      result = await geminiQuestion.generateContent(prompt);
+      result = await geminiEval.generateContent(prompt);
     } catch (err: any) {
       if (err?.status === 429 || err?.status === 503) {
-        result = await geminiQuestionFallback.generateContent(prompt);
+        result = await geminiEvalFallback.generateContent(prompt);
       } else {
         throw err;
       }

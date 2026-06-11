@@ -2,10 +2,11 @@
 // About / How it works page — shown to logged-out users via navbar
 // Static page, no data fetching needed
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Bot, BarChart2, History, SlidersHorizontal, Database, MessageSquare, Keyboard, Brain, Trophy, Sparkles} from "lucide-react";
 
-export const metadata = {
+export const metadata: Metadata = {
   title:       "How it works",
   description: "Learn how RoundOne simulates real interviews, scores your answers, and helps you improve.",
 };
