@@ -39,11 +39,10 @@ export default async function DashboardPage() {
   // Fetch last 7 completed sessions for trend + recent list
   const { data: sessions } = await supabase
     .from("sessions")
-    .select("id, role, type, level, score, created_at")
+    .select("id, role, type, level, score, completed, created_at")
     .eq("user_id", user.id)
-    .eq("completed", true)
     .order("created_at", { ascending: false })
-    .limit(7);
+    .limit(10);
 
   // Fetch last session's strengths and weaknesses for AI insights
   const { data: lastSessionFull } = await supabase
@@ -56,18 +55,24 @@ export default async function DashboardPage() {
     .single();
 
   const allSessions = sessions ?? [];
-  const last        = allSessions[0] ?? null;
-  const recentFour  = allSessions.slice(0, 4);
 
-  const avgScore = allSessions.length > 0
-    ? Math.round(allSessions.reduce((sum, s) => sum + (s.score ?? 0), 0) / allSessions.length)
+  // separate completed from incomplete
+  const completedSessions = allSessions.filter((s) => s.completed);
+  const last = completedSessions[0] ?? null;
+  const recentFour = allSessions.slice(0, 4); // keep all for the list
+
+  // use only completed sessions for calculations
+  const avgScore = completedSessions.length > 0
+    ? Math.round(completedSessions.reduce((sum, s) => sum + (s.score ?? 0), 0) / completedSessions.length)
     : 0;
 
-  const bestScore = allSessions.length > 0
-    ? Math.max(...allSessions.map((s) => s.score ?? 0))
+  const bestScore = completedSessions.length > 0
+    ? Math.max(...completedSessions.map((s) => s.score ?? 0))
     : 0;
 
-  const trendSessions = [...allSessions].reverse();
+  // trend uses only completed sessions too
+  const trendSessions = [...completedSessions].reverse();
+  
   const strengths     = lastSessionFull?.strengths  ?? [];
   const weaknesses    = lastSessionFull?.weaknesses ?? [];
 
@@ -216,27 +221,35 @@ export default async function DashboardPage() {
             {recentFour.map((session) => {
               const sc = scoreColor(session.score ?? 0);
               return (
-                <Link
-                  key={session.id}
-                  href={`/results/${session.id}`}
-                  className="flex items-center justify-between py-2.5 border-b
-                             border-[#f0ecfd] last:border-0 group"
-                >
-                  <div>
-                    <p className="text-xs font-semibold text-[#1a1a2e]
-                                  group-hover:text-primary-medium transition-colors">
-                      {session.role}
-                    </p>
-                    <p className="text-[10px] text-[#9090b0] mt-0.5">
-                      {session.type} · {relativeDate(session.created_at)}
-                    </p>
-                  </div>
+              <Link
+                key={session.id}
+                href={session.completed ? `/results/${session.id}` : `/interview/${session.id}`}
+                className="flex items-center justify-between py-2.5 border-b
+                  border-[#f0ecfd] last:border-0 group"
+              >
+                <div>
+                  <p className="text-xs font-semibold text-[#1a1a2e]
+                      group-hover:text-primary-medium transition-colors">
+                    {session.role}
+                  </p>
+                  <p className="text-[10px] text-[#9090b0] mt-0.5">
+                    {session.type} · {relativeDate(session.created_at)}
+                  </p>
+                </div>
+
+                {session.completed ? (
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg ${sc.bg} ${sc.text}`}>
                     {session.score ?? "—"}
                   </span>
-                </Link>
+                ) : (
+                  <span className="text-[10px] font-semibold text-[#D97706] bg-[#FFFBEB]
+                         border border-[#D97706]/30 px-2.5 py-1 rounded-lg">
+                    Resume
+                  </span>
+                )}
+              </Link>
               );
-            })}
+            })}          
           </div>
         </div>
 

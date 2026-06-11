@@ -46,9 +46,9 @@ export default function LandingPage() {
             />
             <div className="space-y-2 mb-4">
               {[
-                { color: "#7C52D9", text: "Strong system design answers" },
-                { color: "#E4669A", text: "Improve async/await explanation" },
-                { color: "#4E86E4", text: "Good communication style" },
+                { color: "#7C52D9", text: "Conversational AI Interviews" },
+                { color: "#E4669A", text: "Score Trend Chart And History" },
+                { color: "#4E86E4", text: "Detailed Feedback On All Questions" },
               ].map((item, i) => (
                 <div key={i} className="group-hover:ml-1 ease-in-out transition-all duration-300 flex items-center gap-2 text-xs text-[#5a5a7a] py-1.5 border-b border-[#f0ecfd] last:border-0">
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: item.color }} />
@@ -123,12 +123,12 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
-            { icon: <BotMessageSquare/>, title: "Conversational AI", desc: "Questions adapt in real-time based on what you say — not a static question bank.", tag: "Gemini API", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
-            { icon: <PenLine/>, title: "Per-answer scoring", desc: "Each answer gets its own score and detailed feedback, not just a final number.", tag: "Detailed", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
-            { icon: <FileClock/>, title: "Session history", desc: "All past interviews saved. Review full Q&A and feedback anytime.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
-            { icon: <UsersRound/>, title: "Any role, any level", desc: "Not just a fixed list — type in any role. Fresher, mid, or senior. Technical, HR, or mixed.", tag: "Flexible", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
-            { icon: <Share2/>, title: "Shareable results", desc: "Make your result public and share the link on LinkedIn or with recruiters.", tag: "One click", bg: "bg-tertiary-light", text: "text-tertiary-dark", hover: "hover:border-tertiary-medium hover:shadow-tertiary-medium/10" },
-            { icon: <TrendingUp/>, title: "Track your progress", desc: "Score trend chart and session history show how much you've improved over time.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
+            { icon: <BotMessageSquare/>, title: "Conversational AI", desc: "Gemini reads your answers and asks follow-up questions — the way a real interviewer would.", tag: "Gemini API", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
+            { icon: <PenLine/>, title: "Per-answer scoring", desc: "Every answer gets its own score and written feedback. See exactly where you gained and lost points.", tag: "Detailed", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
+            { icon: <FileClock/>, title: "Session history", desc: "Every interview is saved. Go back, review the full Q&A, and see how your thinking has evolved.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },
+            { icon: <UsersRound/>, title: "Any role, any level", desc: "Type in any role — frontend, PM, data engineer, whatever. Pair it with your experience level and interview type.", tag: "Flexible", bg: "bg-secondary-light", text: "text-secondary-dark", hover: "hover:border-secondary-medium hover:shadow-secondary-medium/10" },
+            { icon: <Share2/>, title: "Shareable results", desc: "One click makes your result public. Send the link to recruiters or post it on LinkedIn.", tag: "One click", bg: "bg-tertiary-light", text: "text-tertiary-dark", hover: "hover:border-tertiary-medium hover:shadow-tertiary-medium/10" },
+            { icon: <TrendingUp/>, title: "Track your progress", desc: "Your dashboard shows score trends across sessions — so you can see improvement, not just results.", tag: "Dashboard", bg: "bg-primary-light", text: "text-primary-dark", hover: "hover:border-primary-medium hover:shadow-primary-medium/10" },         
           ].map((feat) => (
             <div
               key={feat.title}

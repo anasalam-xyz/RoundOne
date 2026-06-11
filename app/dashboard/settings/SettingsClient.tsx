@@ -304,7 +304,7 @@ export default function SettingsClient({ userId, email, name, memberSince }: Pro
           <div className="flex items-center justify-between py-3">
             <div>
               <p className="text-sm font-semibold text-[#1a1a2e]">Delete account</p>
-              <p className="text-xs text-[#9090b0]">Permanently delete your account and all sessions</p>
+              <p className="text-xs text-[#9090b0] pr-2">Permanently delete your account and all sessions</p>
             </div>
 
             {!deleteConfirm ? (

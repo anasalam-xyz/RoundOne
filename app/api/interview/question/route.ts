@@ -3,7 +3,7 @@
 // Called from /interview/[id] after each answer is submitted
 
 import { createClient } from "@/lib/supabase/server";
-import { geminiQuestion } from "@/lib/ai/gemini";
+import { geminiQuestion, geminiQuestionFallback } from "@/lib/ai/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -51,7 +51,17 @@ export async function POST(request: NextRequest) {
 
       Ask the next interview question. One question only, no preamble, no numbering. Follow naturally from context. ${type === "technical" ? `Focus on ${role}-either a specific concept or real scenarios.` : type === "hr" ? "Focus on behavioural and situational questions." : "Alternate between technical and HR questions."}
     `.trim();
-    const result = await geminiQuestion.generateContent(prompt);
+   
+    let result;
+    try {
+      result = await geminiQuestion.generateContent(prompt);
+    } catch (err: any) {
+      if (err?.status === 429 || err?.status === 503) {
+        result = await geminiQuestionFallback.generateContent(prompt);
+      } else {
+        throw err;
+      }
+    }
     const question = result.response.text().trim();
 
     // check if question already exists for this order_num

@@ -2,7 +2,12 @@ import Link from "next/link";
 import AuthForm from "@/components/auth/AuthForm";
 import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense } from "react
+
+export const metadata = {
+  title:       "Sign in",
+  description: "Log in or create a free RoundOne account to start practicing.",
+};
 
 export default function AuthPage() {
 

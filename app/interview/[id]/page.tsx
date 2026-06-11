@@ -98,6 +98,14 @@ export default function InterviewPage() {
   useEffect(() => {
     if (sessionConfig && !hasFetchedRef.current) {
       hasFetchedRef.current = true;
+      
+      if (sessionConfig.answeredCount >= sessionConfig.questionCount) {
+        // all questions answered but not completed,  evaluation must have failed
+        // retry evaluation with empty history (evaluate route will read from DB)
+        setAnalyzing(true);
+        runFinalEvaluation([]);
+        return;
+      }
       if (sessionConfig.answeredCount > 0) {
       // resume interview:  fetch answered Q&As from DB and rebuild history
         resumeSession();
@@ -191,9 +199,10 @@ export default function InterviewPage() {
       }
 
     } catch (err) {
-      if (retryCount < 3) {
+      if (retryCount < 2) {
         // wait 2 seconds then silently retry
-        setTimeout(() => fetchNextQuestion(prevHistory, retryCount + 1), 2000);
+        const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        setTimeout(() => fetchNextQuestion(prevHistory, retryCount + 1), delay);
       } else {
         // all 3 retries failed — show retry button
         console.error("Failed to fetch question after 3 retries:", err);
@@ -323,7 +332,7 @@ export default function InterviewPage() {
   async function runFinalEvaluation(finalHistory: QAPair[]) {
     if (!sessionConfig) return;
     try {
-      await fetch("/api/interview/evaluate", {
+      const res = await fetch("/api/interview/evaluate", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -334,9 +343,15 @@ export default function InterviewPage() {
           history:   finalHistory,
         }),
       });
+
+      if (!res.ok) throw new Error("Evaluation failed");
+
       router.push(`/results/${id}`);
+
     } catch (err) {
       console.error("Evaluation failed:", err);
+      // retry evaluation once after 3 seconds
+      setTimeout(() => runFinalEvaluation(finalHistory), 3000);
     }
   }
 
@@ -510,10 +525,9 @@ export default function InterviewPage() {
                 ))}
                   </div>
             ) : questionError ? (
-              // error + retry
-            <div className="flex items-center gap-3">
-              <p className="text-xs text-[#DC2626]">Failed to load question.</p>
-                <p className="text-xs text-[#DC2626]">Please try again later.</p>
+                // error + retry
+              <div className="flex items-center gap-3">
+                <p className="text-xs text-[#DC2626]">Failed to load question. Please try again later.</p>
                 <button
                   onClick={() => fetchNextQuestion(history)}
                   className="text-xs font-semibold text-primary-medium bg-primary-light

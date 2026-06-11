@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RoundOne — AI Mock Interview",
     description: "Practice job interviews with AI. Get scored, get detailed feedback.",
-    url: "https://todo...",
+    url: "https://getroundone.vercel.app",
     siteName: "RoundOne",
     type: "website",
   },
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "RoundOne — AI Mock Interview",
     description: "Practice job interviews with AI. Get scored, get detailed feedback.",
   },
-  metadataBase: new URL("https://todo..."), // required for og:image absolute URLs
+  metadataBase: new URL("https://getroundone.vercel.app"),// required for og:image absolute URLs
 };
 
 export default function RootLayout({

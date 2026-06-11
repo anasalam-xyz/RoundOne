@@ -1,3 +1,9 @@
+
+export const metadata = {
+  title:       "Terms of Use",
+  description: "Terms and conditions for using RoundOne.",
+};
+
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#f7f5ff] font-body">

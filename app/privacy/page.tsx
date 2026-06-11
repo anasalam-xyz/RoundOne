@@ -1,3 +1,9 @@
+
+export const metadata = {
+  title:       "Privacy Policy",
+  description: "How RoundOne collects, uses, and protects your data.",
+};
+
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#f7f5ff] font-body">

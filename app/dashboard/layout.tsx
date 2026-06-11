@@ -3,6 +3,7 @@
 
 import Sidebar from "@/components/dashboard/Sidebar";
 import Topbar from "@/components/dashboard/Topbar";
+import TopLoader from "@/components/dashboard/TopLoader";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -34,6 +35,7 @@ export default async function DashboardLayout({
     // h-screen + overflow-hidden = the page never scrolls as a whole
     // only the <main> content area scrolls independently
     <div className="flex flex-col md:flex-row bg-[#f7f5ff] font-body" style={{ height: '100dvh' }}>
+      <TopLoader />
       <Sidebar initials={initials} />
       <div className="flex flex-col flex-1 overflow-hidden order-1">
         <Topbar initials={initials} name={name.split(" ")[0] || "You"}/>

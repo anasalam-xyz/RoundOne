@@ -1,6 +1,6 @@
 // app/api/interview/evaluate/route.ts
 import { createClient } from "@/lib/supabase/server";
-import { geminiEval } from "@/lib/ai/gemini";
+import { geminiEval, geminiEvalFallback } from "@/lib/ai/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 interface QAPair {
@@ -27,7 +27,26 @@ export async function POST(request: NextRequest) {
       history:   QAPair[];
     } = await request.json();
 
-    const qaText = history.map((h, i) =>
+    let qaHistory = history;
+
+    // if history is empty (retry after page refresh), read answers from DB
+    if (qaHistory.length === 0) {
+    const { data: dbQuestions } = await supabase
+      .from("questions")
+      .select("question_text, answer_text, time_to_first_key, answer_duration")
+      .eq("session_id", sessionId)
+      .not("answer_text", "is", null)
+      .order("order_num", { ascending: true });
+
+    qaHistory = (dbQuestions ?? []).map((q: any) => ({
+      question:       q.question_text,
+      answer:         q.answer_text ?? "",
+      timeToFirstKey: q.time_to_first_key ?? 0,
+      answerDuration: q.answer_duration ?? 0,
+    }));
+  }
+
+    const qaText = qaHistory.map((h, i) =>
       `Q${i + 1}: ${h.question}\nA${i + 1}: ${h.answer}\nTime to start: ${Math.round(h.timeToFirstKey / 1000)}s | Answer duration: ${Math.round(h.answerDuration / 1000)}s`
     ).join("\n\n");
 
@@ -42,7 +61,16 @@ export async function POST(request: NextRequest) {
       Score on: answer quality, depth, relevance, confidence (time to first key), fluency (answer duration). Be honest and constructive.
     `.trim();
 
-    const result  = await geminiEval.generateContent(prompt);
+    let result;
+    try {
+      result = await geminiQuestion.generateContent(prompt);
+    } catch (err: any) {
+      if (err?.status === 429 || err?.status === 503) {
+        result = await geminiQuestionFallback.generateContent(prompt);
+      } else {
+        throw err;
+      }
+    }    
     const rawText = result.response.text().trim();
 
     let evaluation;
@@ -62,11 +90,11 @@ export async function POST(request: NextRequest) {
       await supabase
         .from("questions")
         .update({
-          answer_text:       history[answer.orderNum - 1].answer,
+          answer_text:       qaHistory[answer.orderNum - 1].answer,
           score:             answer.score,
           feedback:          answer.feedback,
-          time_to_first_key: history[answer.orderNum - 1].timeToFirstKey,
-          answer_duration:   history[answer.orderNum - 1].answerDuration,
+          time_to_first_key: qaHistory[answer.orderNum - 1].timeToFirstKey,
+          answer_duration:   qaHistory[answer.orderNum - 1].answerDuration,
         })
         .eq("session_id", sessionId)
         .eq("order_num",  answer.orderNum);

@@ -5,7 +5,10 @@
 import Link from "next/link";
 import { Bot, BarChart2, History, SlidersHorizontal, Database, MessageSquare, Keyboard, Brain, Trophy, Sparkles} from "lucide-react";
 
-// ── Data ───────────────────────────────────────────────
+export const metadata = {
+  title:       "How it works",
+  description: "Learn how RoundOne simulates real interviews, scores your answers, and helps you improve.",
+};
 
 const WHAT_CARDS = [
   {
