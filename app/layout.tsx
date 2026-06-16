@@ -36,11 +36,13 @@ export const metadata: Metadata = {
     url: "https://getroundone.vercel.app",
     siteName: "RoundOne",
     type: "website",
+    images: [{ url: "/og-image.jpg", width: 1316, height: 611 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "RoundOne — AI Mock Interview",
     description: "Practice job interviews with AI. Get scored, get detailed feedback.",
+    images: ["/og-image.jpg"],
   },
   metadataBase: new URL("https://getroundone.vercel.app"),// required for og:image absolute URLs
 };
