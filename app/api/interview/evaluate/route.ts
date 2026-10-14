@@ -1,11 +1,11 @@
 // app/api/interview/evaluate/route.ts
 import { createClient } from "@/lib/supabase/server";
-import { geminiEval, geminiEvalFallback } from "@/lib/ai/gemini";
+import { askGroq } from "@/lib/ai/groq";
 import { NextRequest, NextResponse } from "next/server";
 
 interface QAPair {
-  question:       string;
-  answer:         string;
+  question: string;
+  answer: string;
   timeToFirstKey: number;
   answerDuration: number;
 }
@@ -21,30 +21,30 @@ export async function POST(request: NextRequest) {
 
     const { sessionId, role, level, type, history }: {
       sessionId: string;
-      role:      string;
-      level:     string;
-      type:      string;
-      history:   QAPair[];
+      role: string;
+      level: string;
+      type: string;
+      history: QAPair[];
     } = await request.json();
 
     let qaHistory = history;
 
     // if history is empty (retry after page refresh), read answers from DB
     if (qaHistory.length === 0) {
-    const { data: dbQuestions } = await supabase
-      .from("questions")
-      .select("question_text, answer_text, time_to_first_key, answer_duration")
-      .eq("session_id", sessionId)
-      .not("answer_text", "is", null)
-      .order("order_num", { ascending: true });
+      const { data: dbQuestions } = await supabase
+        .from("questions")
+        .select("question_text, answer_text, time_to_first_key, answer_duration")
+        .eq("session_id", sessionId)
+        .not("answer_text", "is", null)
+        .order("order_num", { ascending: true });
 
-    qaHistory = (dbQuestions ?? []).map((q: any) => ({
-      question:       q.question_text,
-      answer:         q.answer_text ?? "",
-      timeToFirstKey: q.time_to_first_key ?? 0,
-      answerDuration: q.answer_duration ?? 0,
-    }));
-  }
+      qaHistory = (dbQuestions ?? []).map((q: any) => ({
+        question: q.question_text,
+        answer: q.answer_text ?? "",
+        timeToFirstKey: q.time_to_first_key ?? 0,
+        answerDuration: q.answer_duration ?? 0,
+      }));
+    }
 
     const qaText = qaHistory.map((h, i) =>
       `Q${i + 1}: ${h.question}\nA${i + 1}: ${h.answer}\nTime to start: ${Math.round(h.timeToFirstKey / 1000)}s | Answer duration: ${Math.round(h.answerDuration / 1000)}s`
@@ -61,24 +61,14 @@ export async function POST(request: NextRequest) {
       Score on: answer quality, depth, relevance, confidence (time to first key), fluency (answer duration). Be honest and constructive.
     `.trim();
 
-    let result;
-    try {
-      result = await geminiEval.generateContent(prompt);
-    } catch (err: any) {
-      if (err?.status === 429 || err?.status === 503) {
-        result = await geminiEvalFallback.generateContent(prompt);
-      } else {
-        throw err;
-      }
-    }    
-    const rawText = result.response.text().trim();
+    const rawText = (await askGroq(prompt)).trim();
 
     let evaluation;
     try {
       const cleaned = rawText.replace(/```json|```/g, "").trim();
       evaluation = JSON.parse(cleaned);
     } catch (parseErr) {
-      console.error("Failed to parse Gemini response:", rawText);
+      console.error("Failed to parse Groq response:", rawText);
       return NextResponse.json(
         { message: "Failed to parse evaluation" },
         { status: 500 }
@@ -90,25 +80,25 @@ export async function POST(request: NextRequest) {
       await supabase
         .from("questions")
         .update({
-          answer_text:       qaHistory[answer.orderNum - 1].answer,
-          score:             answer.score,
-          feedback:          answer.feedback,
+          answer_text: qaHistory[answer.orderNum - 1].answer,
+          score: answer.score,
+          feedback: answer.feedback,
           time_to_first_key: qaHistory[answer.orderNum - 1].timeToFirstKey,
-          answer_duration:   qaHistory[answer.orderNum - 1].answerDuration,
+          answer_duration: qaHistory[answer.orderNum - 1].answerDuration,
         })
         .eq("session_id", sessionId)
-        .eq("order_num",  answer.orderNum);
+        .eq("order_num", answer.orderNum);
     }
 
     // Update session with overall results
     const { error: sessionError } = await supabase
       .from("sessions")
       .update({
-        score:      evaluation.overallScore,
-        verdict:    evaluation.verdict,
-        strengths:  evaluation.strengths,
+        score: evaluation.overallScore,
+        verdict: evaluation.verdict,
+        strengths: evaluation.strengths,
         weaknesses: evaluation.weaknesses,
-        completed:  true,
+        completed: true,
       })
       .eq("id", sessionId);
 
