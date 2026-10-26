@@ -8,6 +8,11 @@
 
 ## Screenshots
 
+<img width="1920" height="1200" alt="landing" src="https://github.com/user-attachments/assets/11ae5306-bdb6-4cd1-ac5b-8523c5917bdf" />
+<img width="1920" height="1200" alt="dashboard" src="https://github.com/user-attachments/assets/121e42da-c1b9-4e11-8042-9f74589fe429" />
+<img width="1920" height="1200" alt="interview" src="https://github.com/user-attachments/assets/8454deb0-e28b-4698-a645-542f60552548" />
+<img width="1920" height="1200" alt="result" src="https://github.com/user-attachments/assets/5c07be19-4928-42a7-a03a-e0f933eff1e3" />
+
 ---
 
 ## What is RoundOne?
@@ -134,7 +139,7 @@ CREATE TRIGGER on_auth_user_created
 ```
 
 Then enable RLS and add policies.
-
+```sql
 -- Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
@@ -155,7 +160,7 @@ CREATE POLICY "Users can view own questions" ON questions FOR SELECT USING (auth
 CREATE POLICY "Users can create own questions" ON questions FOR INSERT WITH CHECK (auth.uid() = (SELECT user_id FROM sessions WHERE id = questions.session_id));
 CREATE POLICY "Users can update own questions" ON questions FOR UPDATE USING (auth.uid() = (SELECT user_id FROM sessions WHERE id = questions.session_id));
 CREATE POLICY "Questions of public sessions viewable by anyone" ON questions FOR SELECT USING (EXISTS (SELECT 1 FROM sessions WHERE sessions.id = questions.session_id AND sessions.is_public = true));
-
+```
 **5. Run the dev server**
 ```bash
 npm run dev
@@ -217,7 +222,7 @@ components/
 ## Known Limitations
 
 - **Voice mode is Chrome-only** — Web Speech API has limited cross-browser support
-- **Groq free tier** — rate limits apply; two API keys used to double the quota
+- **Groq free tier** — rate limits apply
 - **No real-time updates** — dashboard data cached for 60s; refresh after completing an interview
 
 ---
