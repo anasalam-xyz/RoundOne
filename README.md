@@ -12,7 +12,7 @@
 
 ## What is RoundOne?
 
-RoundOne is an AI-powered mock interview platform that simulates a real interview experience. You pick your role, experience level, and interview type — Gemini asks you questions one at a time, adapts based on your answers, then evaluates everything and gives you a detailed score, per-answer feedback, strengths, and weaknesses.
+RoundOne is an AI-powered mock interview platform that simulates a real interview experience. You pick your role, experience level, and interview type — Groq asks you questions one at a time, adapts based on your answers, then evaluates everything and gives you a detailed score, per-answer feedback, strengths, and weaknesses.
 
 Not a quiz. Not a question bank. An actual conversation.
 
@@ -20,7 +20,7 @@ Not a quiz. Not a question bank. An actual conversation.
 
 ## Features
 
-- **Conversational AI** — questions follow naturally from your previous answers via Gemini
+- **Conversational AI** — questions follow naturally from your previous answers via Groq
 - **Any role** — type in any role, not just a fixed list
 - **Per-answer scoring** — every answer gets its own score and feedback
 - **Overall evaluation** — score out of 100, verdict, 3 strengths, 3 weaknesses
@@ -41,7 +41,7 @@ Not a quiz. Not a question bank. An actual conversation.
 | Styling | Tailwind CSS v4 |
 | Database | Supabase (PostgreSQL) |
 | Auth | Supabase Auth |
-| AI | Google Gemini API (`gemini-2.5-flash`) |
+| AI | Groq API |
 | Voice | Web Speech API |
 | Deployment | Vercel |
 
@@ -49,7 +49,7 @@ Not a quiz. Not a question bank. An actual conversation.
 
 ## Running Locally
 
-**Prerequisites:** Node.js 18+, a Supabase project, a Gemini API key
+**Prerequisites:** Node.js 18+, a Supabase project, a Groq API key
 
 **1. Clone the repo**
 ```bash
@@ -70,8 +70,8 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 DATABASE_URL=your_database_url
-GEMINI_API_KEY_1=your_gemini_key_1
-GEMINI_API_KEY_2=your_gemini_key_2
+GROQ_API_KEY_EVAL=groq_key
+GROQ_API_KEY_QUES=groq_key
 ```
 
 **4. Set up the database**
@@ -191,7 +191,7 @@ app/
 
 lib/
   supabase/               # Client, server, middleware clients
-  ai/gemini.ts            # Gemini clients (split across 2 API keys)
+  ai/groq.ts            # groq clients 
 
 components/
   dashboard/              # Sidebar, Topbar
@@ -205,11 +205,11 @@ components/
 
 1. User configures interview — role (free text), level, type, question count, text/voice
 2. Session created in Supabase
-3. Gemini generates first question based on config
+3. Groq generates first question based on config
 4. User answers — time-to-first-keystroke and answer duration tracked silently
-5. Gemini reads the answer, generates a follow-up question (last 2 exchanges sent for context to save tokens)
-6. After final answer, all Q&A + timing data sent to Gemini for evaluation
-7. Gemini returns structured JSON — overall score, per-answer score/feedback, strengths, weaknesses, verdict
+5. Groq reads the answer, generates a follow-up question (last 2 exchanges sent for context to save tokens)
+6. After final answer, all Q&A + timing data sent to Groq for evaluation
+7. Groq returns structured JSON — overall score, per-answer score/feedback, strengths, weaknesses, verdict
 8. Results saved to DB, user redirected to results page
 
 ---
@@ -217,22 +217,19 @@ components/
 ## Known Limitations
 
 - **Voice mode is Chrome-only** — Web Speech API has limited cross-browser support
-- **Gemini free tier** — rate limits apply; two API keys used to double the quota
+- **Groq free tier** — rate limits apply; two API keys used to double the quota
 - **No real-time updates** — dashboard data cached for 60s; refresh after completing an interview
 
 ---
 
 ## Built by
 
-**Anas Alam** — 1st year BCA student who decided that building a full-stack AI SaaS was a totally normal way to learn Next.js for the first time. Spoiler: it worked. Somehow.
+**Anas Alam**
 
-Previously knew: React, Node.js, MongoDB.
-Now also knows: Next.js App Router, TypeScript, PostgreSQL, Supabase, Gemini API, and why `params` needs to be awaited in Next.js 15.
-
-[github.com/anasalam-xyz](https://github.com/anasalam-xyz) · [getroundone.vercel.app](https://getroundone.vercel.app)
+[github.com/anasalam-xyz](https://github.com/anasalam-xyz) 
 
 ---
 
 ## License
 
-MIT — do whatever you want with it, just don't claim you built it from scratch in your own portfolio 😄
+MIT

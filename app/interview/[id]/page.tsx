@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { SendHorizonal, StopCircle, Mic, MicOff, Volume2, Sparkles } from "lucide-react";
+import { SendHorizonal, StopCircle, Mic, MicOff, Volume2, Cpu } from "lucide-react";
 
 interface QAPair {
   question:       string;
@@ -399,7 +399,7 @@ export default function InterviewPage() {
                             animate-[ping_1.5s_ease-in-out_infinite]" />
             <div className="w-16 h-16 rounded-full bg-primary-light border border-primary-medium/20
                             flex items-center justify-center">
-                <Sparkles />
+                <Cpu />
             </div>
           </div>
 
@@ -408,7 +408,7 @@ export default function InterviewPage() {
               Analyzing your answers
             </h2>
             <p className="text-sm text-[#9090b0] max-w-sm leading-relaxed">
-              Gemini is reviewing all {sessionConfig.questionCount} responses and building
+              Groq is reviewing all {sessionConfig.questionCount} responses and building
               your personalized feedback report.
             </p>
           </div>
